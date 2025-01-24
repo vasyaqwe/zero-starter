@@ -1,0 +1,14 @@
+{
+   "extends": "@project/tsconfig/base.json",
+   "compilerOptions": {
+      "lib": ["ESNext", "DOM", "DOM.iterable"],
+      "baseUrl": ".",
+      "paths": {
+         "@project/api/*": ["../../packages/api/src/*"],
+         "@/*": ["./src/*"]
+      },
+      "tsBuildInfoFile": "node_modules/.cache/tsbuildinfo.json"
+   },
+   //including packages makes autoimports work, but breaks build - so dev only
+   "include": ["src", "../../packages"]
+}

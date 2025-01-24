@@ -1,0 +1,35 @@
+{
+  "name": "starter",
+  "private": true,
+  "packageManager": "pnpm@9.1.0",
+  "scripts": {
+    "build": "turbo build",
+    "build:desktop": "turbo build --filter=@project/web && pnpm --filter apps/web tauri build",
+    "build:web": "turbo build --filter=@project/web",
+    "build:cache": "turbo build --filter=@project/cache",
+    "build:www": "turbo build --filter=@project/www",
+    "start": "turbo start",
+    "clean": "git clean -xdf node_modules",
+    "clean:workspaces": "turbo clean",
+    "db:generate": "pnpm --filter @project/db generate",
+    "db:migrate": "pnpm --filter @project/db migrate",
+    "db:push": "pnpm --filter @project/db push",
+    "db:drop": "pnpm --filter @project/db drop",
+    "db:studio": "pnpm --filter @project/db studio",
+    "dev": "turbo dev --parallel",
+    "dev:server": "turbo dev --filter=@project/server",
+    "dev:desktop": "concurrently \"turbo dev --filter=@project/server\" \"pnpm --filter apps/web tauri dev\"",
+    "dev:web": "turbo dev --filter=@project/web --filter=@project/server",
+    "dev:cache": "turbo dev --filter=@project/cache", 
+    "dev:www": "turbo dev --filter=@project/www",
+    "format-lint": "biome check",
+    "format-lint:fix": "biome check --write",
+    "typecheck": "turbo typecheck"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^1.9.4",
+    "concurrently": "^9.1.2",
+    "turbo": "^2.3.3",
+    "typescript": "^5.7.2"
+  }
+}

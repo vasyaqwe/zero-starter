@@ -1,0 +1,16 @@
+{
+   "name": "@project/server",
+   "scripts": {
+      "dev": "wrangler dev --local --config='../../wrangler.json' src/index.ts --port 8787",
+      "deploy": "wrangler deploy --config='../../wrangler.json' --minify src/index.ts --env production",
+      "typecheck": "tsc --noEmit"
+   },
+   "dependencies": {
+      "@project/api": "workspace:*"
+   },
+   "devDependencies": {
+      "@cloudflare/workers-types": "^4.20250124.3",
+      "@project/tsconfig": "workspace:*",
+      "wrangler": "^3.105.1"
+   }
+}

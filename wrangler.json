@@ -1,0 +1,27 @@
+{
+   "name": "project",
+   "main": "apps/server/src/index.ts",
+   "compatibility_date": "2024-09-23",
+   "workers_dev": false,
+   "placement": {
+      "mode": "smart"
+   },
+   "env": {
+      "development": {
+         "vars": {
+            "ENVIRONMENT": "development",
+            "SERVER_DOMAIN": "http://localhost:8787",
+            "WEB_DOMAIN": "http://localhost:3000",
+            "CLOUDFLARE_ACCOUNT_ID": "1e215b49c02d477a94390a0e93446bb7"
+         }
+      },
+      "production": {
+         "vars": {
+            "ENVIRONMENT": "production",
+            "SERVER_DOMAIN": "https://dev-api.project.io",
+            "WEB_DOMAIN": "https://dev.project.io",
+            "CLOUDFLARE_ACCOUNT_ID": "1e215b49c02d477a94390a0e93446bb7"
+         }
+      }
+   }
+}
