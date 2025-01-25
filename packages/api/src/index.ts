@@ -16,7 +16,7 @@ app.use(logger())
       c.set("db", initDb(c))
 
       const handler = cors({
-         origin: [env(c).WEB_DOMAIN, ...ALLOWED_ORIGINS],
+         origin: [env(c).WEB_DOMAIN, env(c).AUTH_DOMAIN, ...ALLOWED_ORIGINS],
          credentials: true,
          maxAge: 600,
       })
@@ -34,7 +34,7 @@ const apiRoutes = createRouter()
 
 const baseRoutes = createRouter().use((c, next) => {
    const handler = csrf({
-      origin: [env(c).WEB_DOMAIN, ...ALLOWED_ORIGINS],
+      origin: [env(c).WEB_DOMAIN, env(c).AUTH_DOMAIN, ...ALLOWED_ORIGINS],
    })
    return handler(c, next)
 })

@@ -6,7 +6,6 @@ import { createSubjects } from "@openauthjs/openauth/subject"
 import { CodeUI } from "@openauthjs/openauth/ui/code"
 import { type Database, initDb } from "@project/db/client"
 import { user, userInsertSchema } from "@project/db/schema/user"
-import { eq } from "drizzle-orm"
 import { Hono } from "hono"
 import { env } from "hono/adapter"
 import { cors } from "hono/cors"
@@ -25,6 +24,7 @@ type Env = {
    GITHUB_CLIENT_ID: string
    GITHUB_CLIENT_SECRET: string
    WEB_DOMAIN: string
+   SERVER_DOMAIN: string
 }
 
 const app = new Hono<{
@@ -38,7 +38,7 @@ const app = new Hono<{
       c.set("db", initDb(c))
 
       const handler = cors({
-         origin: [env(c).WEB_DOMAIN, ...ALLOWED_ORIGINS],
+         origin: [env(c).WEB_DOMAIN, env(c).SERVER_DOMAIN, ...ALLOWED_ORIGINS],
          credentials: true,
          maxAge: 600,
       })
@@ -61,19 +61,22 @@ const app = new Hono<{
                scopes: ["user:email"],
             }),
          },
+         allow: async () => {
+            return true
+         },
          subjects,
          async success(ctx, value) {
             console.log(value, "<<<<<<<<<<")
             if (value.provider === "code") {
-               let [foundUser] = await c.var.db
-                  .select()
-                  .from(user)
-                  .where(eq(user.email, value.claims.email))
+               let foundUser = await c.var.db.query.user.findFirst({
+                  where: (table, { eq }) =>
+                     eq(table.email, value.claims.email!),
+               })
 
                if (!foundUser) {
                   const [createdUser] = await c.var.db
                      .insert(user)
-                     .values({ email: value.claims.email, name: "test" })
+                     .values({ email: value.claims.email!, name: "test" })
                      .returning()
                   foundUser = createdUser
                }

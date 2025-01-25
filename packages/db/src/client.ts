@@ -19,4 +19,4 @@ export const initDb = (c: any) => {
    return db
 }
 
-export type Database = NeonDatabase
+export type Database = NeonDatabase<typeof schema>

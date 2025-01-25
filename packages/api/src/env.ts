@@ -4,4 +4,5 @@ export type Env = {
    DATABASE_URL: string
    SERVER_DOMAIN: string
    WEB_DOMAIN: string
+   AUTH_DOMAIN: string
 }
