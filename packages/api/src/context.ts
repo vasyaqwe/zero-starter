@@ -1,12 +1,12 @@
 import type { Env } from "@project/api/env"
 import type { Database } from "@project/db/client"
+import type { User } from "@project/db/schema/user"
 
 type Variables = {
    db: Database
 }
 
-// biome-ignore lint/suspicious/noExplicitAny: <explanation>
-type AuthVariables = { user: any; session: any }
+type AuthVariables = { user: User }
 
 export type HonoEnv = {
    Bindings: Env

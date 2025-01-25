@@ -45,16 +45,14 @@ export const authRoute = createRouter()
          //     url.searchParams.set('next', next)
          // }
 
-         const exchanged = await auth.exchange(code, url.toString())
+         const exchanged = await auth(c).exchange(code, url.toString())
 
-         if (exchanged.err) {
-            throw new HTTPException(400, exchanged.err)
-         }
+         if (exchanged.err) throw new HTTPException(400, exchanged.err)
 
          setCookie(c, "access_token", exchanged.tokens.access, cookieOptions)
          setCookie(c, "refresh_token", exchanged.tokens.refresh, cookieOptions)
 
-         return c.redirect(next || `${env(c).WEB_DOMAIN}`)
+         return c.redirect(next ?? `${env(c).WEB_DOMAIN}`)
       },
    )
    .post("/logout", async (c) => {

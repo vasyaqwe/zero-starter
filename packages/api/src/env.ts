@@ -5,5 +5,5 @@ export type Env = {
    SERVER_DOMAIN: string
    WEB_DOMAIN: string
    AUTH_DOMAIN: string
-   JWT_SECRET: string
+   ZERO_AUTH_SECRET: string
 }

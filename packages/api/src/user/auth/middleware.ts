@@ -15,14 +15,11 @@ export const authMiddleware = createMiddleware<AuthedHonoEnv>(
             message: "Unauthorized",
          })
 
-      const verified = await auth.verify(subjects, accessToken, {
+      const verified = await auth(c as never).verify(subjects, accessToken, {
          refresh: refreshToken,
       })
 
-      if (verified.err)
-         throw new HTTPException(401, {
-            message: "Unauthorized",
-         })
+      if (verified.err) throw new HTTPException(401, verified.err)
 
       c.set("user", verified.subject.properties)
 

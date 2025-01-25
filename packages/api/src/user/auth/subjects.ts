@@ -1,6 +1,6 @@
 import { createSubjects } from "@openauthjs/openauth/subject"
-import { userInsertSchema } from "@project/db/schema/user"
+import { userSelectSchema } from "@project/db/schema/user"
 
 export const subjects = createSubjects({
-   user: userInsertSchema,
+   user: userSelectSchema,
 })

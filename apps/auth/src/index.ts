@@ -67,13 +67,26 @@ const app = new Hono<{
 
                let foundUser = await c.var.db.query.user.findFirst({
                   where: (table, { eq }) => eq(table.email, email),
+                  columns: {
+                     id: true,
+                     email: true,
+                     name: true,
+                     partner: true,
+                     image: true,
+                  },
                })
 
                if (!foundUser) {
                   const [createdUser] = await c.var.db
                      .insert(user)
                      .values({ email: email, name: "test" })
-                     .returning()
+                     .returning({
+                        id: user.id,
+                        email: user.email,
+                        name: user.name,
+                        partner: user.partner,
+                        image: user.image,
+                     })
                   foundUser = createdUser
                }
 

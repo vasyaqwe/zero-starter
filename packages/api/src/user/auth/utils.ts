@@ -15,7 +15,7 @@ export const createJwt = async ({
    const jwt = await new SignJWT(jwtPayload)
       .setProtectedHeader({ alg: "HS256" })
       .setExpirationTime("1w")
-      .sign(new TextEncoder().encode(env(c).JWT_SECRET))
+      .sign(new TextEncoder().encode(env(c).ZERO_AUTH_SECRET))
 
    return jwt
 }

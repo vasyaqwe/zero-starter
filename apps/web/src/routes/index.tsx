@@ -1,6 +1,8 @@
-import { useQuery, useZero } from "@/lib/zero/hooks"
+import { useZero } from "@/lib/zero/hooks"
 import { auth } from "@/user/auth/client"
+import { useAuth } from "@/user/auth/hooks"
 import { escapeLike } from "@rocicorp/zero"
+import { useQuery } from "@rocicorp/zero/react"
 import { createFileRoute } from "@tanstack/react-router"
 import { type MouseEvent, useRef, useState } from "react"
 import { formatDate } from "./-date"
@@ -14,34 +16,26 @@ export const Route = createFileRoute("/")({
 
 function RouteComponent() {
    const z = useZero()
-   const [users] = useQuery((q) => q.user)
-   const [mediums] = useQuery((q) => q.medium)
+   const { user, logout } = useAuth()
+   const [users] = useQuery(z.query.user)
+   const [mediums] = useQuery(z.query.medium)
 
    const [filterUser, setFilterUser] = useState<string>("")
    const [filterText, setFilterText] = useState<string>("")
 
-   const [allMessages] = useQuery((q) => q.message)
+   const [allMessages] = useQuery(z.query.message)
 
-   const [filteredMessages] = useQuery((q) => {
-      let filtered = q.message
-         .related("medium", (medium) => medium.one())
-         .related("sender", (sender) => sender.one())
-         .orderBy("timestamp", "desc")
+   let filtered = z.query.message
+      .related("medium", (medium) => medium.one())
+      .related("sender", (sender) => sender.one())
+      .orderBy("timestamp", "desc")
 
-      if (filterUser) {
-         filtered = filtered.where("senderId", filterUser)
-      }
+   if (filterUser) filtered = filtered.where("senderId", filterUser)
 
-      if (filterText) {
-         filtered = filtered.where(
-            "body",
-            "LIKE",
-            `%${escapeLike(filterText)}%`,
-         )
-      }
+   if (filterText)
+      filtered = filtered.where("body", "LIKE", `%${escapeLike(filterText)}%`)
 
-      return filtered
-   })
+   const [filteredMessages] = useQuery(filtered)
 
    const hasFilters = filterUser || filterText
    const [action, setAction] = useState<"add" | "remove" | undefined>(undefined)
@@ -52,7 +46,7 @@ function RouteComponent() {
          return false
       }
       const index = randInt(allMessages.length)
-      z.mutate.message.delete({ id: allMessages[index]?.id })
+      z.mutate.message.delete({ id: allMessages[index]?.id ?? "" })
 
       return true
    }
@@ -114,10 +108,10 @@ function RouteComponent() {
    const editMessage = (
       e: MouseEvent,
       id: string,
-      senderID: string,
+      senderId: string,
       prev: string,
    ) => {
-      if (senderID !== z.userID && !e.shiftKey) {
+      if (senderId !== z.userID && !e.shiftKey) {
          alert(
             "You aren't logged in as the sender of this message. Editing won't be permitted. Hold the shift key to try anyway.",
          )
@@ -129,13 +123,9 @@ function RouteComponent() {
          body: body ?? prev,
       })
    }
-
+   console.log(user)
    // If initial sync hasn't completed, these can be empty.
-   if (!users.length || !mediums.length) {
-      return null
-   }
-
-   const user = users.find((user) => user.id === z.userID)?.name ?? "anon"
+   if (!users.length || !mediums.length) return null
 
    return (
       <>
@@ -166,9 +156,12 @@ function RouteComponent() {
                   justifyContent: "end",
                }}
             >
-               {user === "anon" ? "" : `Logged in as ${user}`}
+               {!user ? "" : `Logged in as ${user.email}`}
                <button
                   onMouseDown={async () => {
+                     if (user) {
+                        return await logout()
+                     }
                      const url = new URL(
                         `http://localhost:3000/api/auth/callback`,
                      )
@@ -184,7 +177,7 @@ function RouteComponent() {
                      window.location.href = authUrl
                   }}
                >
-                  {user === "anon" ? "Login" : "Logout"}
+                  {!user ? "Login" : "Logout"}
                </button>
             </div>
          </div>
@@ -273,7 +266,7 @@ function RouteComponent() {
                               editMessage(
                                  e,
                                  message.id,
-                                 message.senderID,
+                                 message.senderId,
                                  message.body,
                               )
                            }

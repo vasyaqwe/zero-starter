@@ -1,4 +1,5 @@
-import { useZeroEmit, zero } from "@/lib/zero/hooks"
+import {} from "@/lib/hono"
+import { usePassJWTToZero, useZeroEmit, zero } from "@/lib/zero/hooks"
 import { ZeroProvider } from "@rocicorp/zero/react"
 import { Outlet, createRootRoute, useMatches } from "@tanstack/react-router"
 import { useTheme } from "next-themes"
@@ -24,6 +25,7 @@ function RootComponent() {
 
    const [zeroInstance, setZeroInstance] = React.useState(zero)
    useZeroEmit((next) => setZeroInstance(next))
+   usePassJWTToZero()
 
    return (
       <ZeroProvider zero={zeroInstance}>

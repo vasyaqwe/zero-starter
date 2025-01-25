@@ -1,6 +1,10 @@
 {
    "extends": "@project/tsconfig/base.json",
    "compilerOptions": {
+      "baseUrl": ".",
+      "paths": {
+         "@project/api/*": ["../../packages/api/src/*"]
+      },
       "types": ["@cloudflare/workers-types"]
    },
    "include": ["src"]

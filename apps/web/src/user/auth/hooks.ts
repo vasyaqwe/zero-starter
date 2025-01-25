@@ -1,18 +1,26 @@
-// import { setZeroAuth } from "@/lib/zero/hooks"
-// import * as React from "react"
+import { hc, honoQueryFn } from "@/lib/hono"
+import { useNavigate } from "@tanstack/react-router"
+import useSWR from "swr"
 
-// export function useAuthPassJWTSecretToZeroEffect() {
-//    const { jwtToken, user } = useAuth()
+export function useAuth() {
+   const user = useSWR(
+      hc.api.auth.me.$url(),
+      honoQueryFn(async () => await hc.api.auth.me.$get()),
+      {
+         shouldRetryOnError: false,
+         revalidateOnFocus: false,
+      },
+   )
 
-//    React.useEffect(() => {
-//       if (user && jwtToken) {
-//          setZeroAuth({
-//             jwtToken,
-//             userID: user.id,
-//          })
-//       }
-//    }, [user, jwtToken])
-// }
+   const navigate = useNavigate()
+
+   const logout = async () => {
+      await hc.api.auth.logout.$post()
+      user.mutate().then(() => navigate({ to: "/login" }))
+   }
+
+   return { ...user, user: user.data, logout }
+}
 
 // export function useAuthPassTokenToTauriEffect ()  {
 //    if (!isTauri) return
