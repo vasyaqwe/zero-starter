@@ -14,5 +14,6 @@ export type HonoEnv = {
 }
 
 export type AuthedHonoEnv = {
+   Bindings: Env
    Variables: Variables & AuthVariables
 }

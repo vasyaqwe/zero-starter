@@ -7,6 +7,10 @@
     ".": {
       "types": "./dist/index.d.ts",
       "default": "./src/index.ts"
+    },
+    "./auth/*": {
+      "types": "./dist/user/auth/*.d.ts",
+      "default": "./src/user/auth/*.ts"
     }
   },
   "license": "MIT",
@@ -20,6 +24,7 @@
     "@project/db": "workspace:*",
     "drizzle-orm": "^0.38.4",
     "hono": "^4.6.12",
+    "jose": "^5.9.6",
     "ky": "^1.7.4",
     "pg": "^8.13.1",
     "remeda": "^2.17.4",

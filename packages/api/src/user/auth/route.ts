@@ -1,10 +1,33 @@
 import { createRouter, zValidator } from "@project/api/misc/utils"
 import { auth, cookieOptions } from "@project/api/user/auth"
+import { authMiddleware } from "@project/api/user/auth/middleware"
+import { createJwt } from "@project/api/user/auth/utils"
+import { user } from "@project/db/schema/user"
+import { eq } from "drizzle-orm"
 import { env } from "hono/adapter"
 import { deleteCookie, setCookie } from "hono/cookie"
+import { HTTPException } from "hono/http-exception"
 import { z } from "zod"
 
 export const authRoute = createRouter()
+   .get("/me", authMiddleware, async (c) => {
+      const db = c.get("db")
+
+      const [foundUser] = await db
+         .select()
+         .from(user)
+         .where(eq(user.id, c.var.user.id))
+
+      if (!foundUser) throw new HTTPException(401, { message: "Unauthorized" })
+
+      const jwt = await createJwt({ c, userId: foundUser.id })
+
+      return c.json({
+         id: foundUser.id,
+         email: foundUser.email,
+         jwt,
+      })
+   })
    .get(
       "/callback",
       zValidator(
@@ -25,8 +48,7 @@ export const authRoute = createRouter()
          const exchanged = await auth.exchange(code, url.toString())
 
          if (exchanged.err) {
-            console.error(exchanged.err)
-            return c.json({ error: exchanged.err }, 400)
+            throw new HTTPException(400, exchanged.err)
          }
 
          setCookie(c, "access_token", exchanged.tokens.access, cookieOptions)
