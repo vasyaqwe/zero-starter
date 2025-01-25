@@ -14,6 +14,7 @@
     "tauri": "tauri"
   },
   "dependencies": {
+    "@openauthjs/openauth": "^0.3.6",
     "@project/cache": "workspace:*",
     "@rocicorp/zero": "^0.11.2025011402",
     "@tanstack/react-router": "^1.95.1",
@@ -25,11 +26,10 @@
     "@tauri-apps/plugin-notification": "^2.2.0",
     "@tauri-apps/plugin-shell": "^2.2.0",
     "@vitejs/plugin-react": "^4.3.4",
+    "@vxrn/emitter": "^1.1.411",
     "babel-plugin-react-compiler": "^19.0.0-beta-e552027-20250112",
     "hono": "^4.6.12",
-    "jose": "^5.9.6",
     "jotai": "^2.11.0",
-    "js-cookie": "^3.0.5",
     "next-themes": "^0.4.4",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
@@ -43,7 +43,6 @@
     "@project/api": "workspace:*",
     "@project/tsconfig": "workspace:*",
     "@tauri-apps/cli": "^2.2.2",
-    "@types/js-cookie": "^3.0.6",
     "@types/node": "^20.12.9",
     "@types/react": "^19.0.2",
     "@types/react-dom": "^19.0.2",

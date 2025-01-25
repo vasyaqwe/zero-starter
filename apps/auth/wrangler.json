@@ -1,6 +1,6 @@
 {
-   "name": "server",
-   "main": "apps/server/src/index.ts",
+   "name": "auth",
+   "main": "src/index.ts",
    "compatibility_flags": ["nodejs_compat"],
    "compatibility_date": "2024-09-23",
    "workers_dev": false,
@@ -9,7 +9,6 @@
    },
    "vars": {
       "ENVIRONMENT": "development",
-      "SERVER_DOMAIN": "http://localhost:8787",
       "WEB_DOMAIN": "http://localhost:3000",
       "CLOUDFLARE_ACCOUNT_ID": "bfef1e994f1aac7e7a42dc4ba75197a0"
    },
@@ -18,7 +17,6 @@
          "vars": {
             "ENVIRONMENT": "production",
             "SERVER_DOMAIN": "https://dev-api.project.com",
-            "WEB_DOMAIN": "https://dev-app.project.com",
             "CLOUDFLARE_ACCOUNT_ID": "bfef1e994f1aac7e7a42dc4ba75197a0"
          }
       }

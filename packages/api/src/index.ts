@@ -1,5 +1,7 @@
 import { handleError } from "@project/api/error/utils"
 import { createRouter } from "@project/api/misc/utils"
+import { authRoute } from "@project/api/user/auth/route"
+import { initDb } from "@project/db/client"
 import { env } from "hono/adapter"
 import { cors } from "hono/cors"
 import { csrf } from "hono/csrf"
@@ -11,7 +13,7 @@ const app = createRouter()
 
 app.use(logger())
    .use((c, next) => {
-      // c.set("db", db)
+      c.set("db", initDb(c))
 
       const handler = cors({
          origin: [env(c).WEB_DOMAIN, ...ALLOWED_ORIGINS],
@@ -23,7 +25,7 @@ app.use(logger())
    .onError(handleError)
 
 const apiRoutes = createRouter()
-   // .route("/auth", authRoute)
+   .route("/auth", authRoute)
    .get("/hello", (c) => {
       return c.json({
          message: "Hello from Hono!",

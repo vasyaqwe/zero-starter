@@ -19,9 +19,15 @@ export default defineConfig(({ mode }) => {
       ],
       preview: {
          port: 3000,
+         proxy: {
+            "/api": "http://localhost:8787",
+         },
       },
       server: {
          port: 3000,
+         proxy: {
+            "/api": "http://localhost:8787",
+         },
       },
    }
 })

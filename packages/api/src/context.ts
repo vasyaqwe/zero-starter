@@ -1,7 +1,9 @@
 import type { Env } from "@project/api/env"
+import type { Database } from "@project/db/client"
 
-// biome-ignore lint/complexity/noBannedTypes: <explanation>
-type Variables = {}
+type Variables = {
+   db: Database
+}
 
 // biome-ignore lint/suspicious/noExplicitAny: <explanation>
 type AuthVariables = { user: any; session: any }

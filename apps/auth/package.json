@@ -1,12 +1,16 @@
 {
-   "name": "@project/server",
+   "name": "@project/auth",
    "scripts": {
-      "dev": "wrangler dev --local src/index.ts --port 8787",
+      "dev": "wrangler dev --local src/index.ts --port 8080",
       "deploy": "wrangler deploy --minify src/index.ts --env production",
       "typecheck": "tsc --noEmit"
    },
    "dependencies": {
-      "@project/api": "workspace:*"
+      "@project/api": "workspace:*",
+      "@openauthjs/openauth": "^0.3.6",
+      "hono": "^4.6.12",
+      "@project/db": "workspace:*",
+      "drizzle-orm": "^0.38.4"
    },
    "devDependencies": {
       "@cloudflare/workers-types": "^4.20250124.3",

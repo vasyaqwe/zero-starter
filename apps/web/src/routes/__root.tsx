@@ -1,26 +1,11 @@
-import { schema } from "@project/cache/schema"
-import { Zero } from "@rocicorp/zero"
+import { useZeroEmit, zero } from "@/lib/zero/hooks"
 import { ZeroProvider } from "@rocicorp/zero/react"
 import { Outlet, createRootRoute, useMatches } from "@tanstack/react-router"
-import { decodeJwt } from "jose"
-import Cookies from "js-cookie"
 import { useTheme } from "next-themes"
 import * as React from "react"
 
 export const Route = createRootRoute({
    component: RootComponent,
-})
-
-const encodedJWT = Cookies.get("jwt")
-const decodedJWT = encodedJWT && decodeJwt(encodedJWT)
-const userID = decodedJWT?.sub ? (decodedJWT.sub as string) : "anon"
-
-const z = new Zero({
-   userID,
-   auth: async () => encodedJWT,
-   server: "http://localhost:4848",
-   schema,
-   kvStore: "mem",
 })
 
 function RootComponent() {
@@ -37,8 +22,11 @@ function RootComponent() {
       }
    }, [resolvedTheme])
 
+   const [zeroInstance, setZeroInstance] = React.useState(zero)
+   useZeroEmit((next) => setZeroInstance(next))
+
    return (
-      <ZeroProvider zero={z}>
+      <ZeroProvider zero={zeroInstance}>
          <Meta>
             {/* <Toaster /> */}
             <Outlet />

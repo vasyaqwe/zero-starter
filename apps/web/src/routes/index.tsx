@@ -1,7 +1,7 @@
 import { useQuery, useZero } from "@/lib/zero/hooks"
+import { auth } from "@/user/auth/client"
 import { escapeLike } from "@rocicorp/zero"
 import { createFileRoute } from "@tanstack/react-router"
-import Cookies from "js-cookie"
 import { type MouseEvent, useRef, useState } from "react"
 import { formatDate } from "./-date"
 import { randInt } from "./-rand"
@@ -29,7 +29,7 @@ function RouteComponent() {
          .orderBy("timestamp", "desc")
 
       if (filterUser) {
-         filtered = filtered.where("senderID", filterUser)
+         filtered = filtered.where("senderId", filterUser)
       }
 
       if (filterText) {
@@ -130,15 +130,6 @@ function RouteComponent() {
       })
    }
 
-   const toggleLogin = async () => {
-      if (z.userID === "anon") {
-         await fetch("/api/login")
-      } else {
-         Cookies.remove("jwt")
-      }
-      location.reload()
-   }
-
    // If initial sync hasn't completed, these can be empty.
    if (!users.length || !mediums.length) {
       return null
@@ -176,7 +167,23 @@ function RouteComponent() {
                }}
             >
                {user === "anon" ? "" : `Logged in as ${user}`}
-               <button onMouseDown={() => toggleLogin()}>
+               <button
+                  onMouseDown={async () => {
+                     const url = new URL(
+                        `http://localhost:3000/api/auth/callback`,
+                     )
+                     // if (next) {
+                     //   url.searchParams.set('next', next)
+                     // }
+
+                     const { url: authUrl } = await auth.authorize(
+                        url.toString(),
+                        "code",
+                     )
+
+                     window.location.href = authUrl
+                  }}
+               >
                   {user === "anon" ? "Login" : "Logout"}
                </button>
             </div>
