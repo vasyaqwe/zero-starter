@@ -21,7 +21,10 @@ export const medium = createTable("medium", {
 })
 
 export const messageRelations = relations(message, ({ one }) => ({
-   medium: one(medium),
+   medium: one(medium, {
+      fields: [message.mediumId],
+      references: [medium.id],
+   }),
    sender: one(user, {
       fields: [message.senderId],
       references: [user.id],

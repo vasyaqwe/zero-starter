@@ -10,7 +10,7 @@ export const initDb = (c: any) => {
       const client = new Pool({ connectionString: c.env.DATABASE_URL })
       db = drizzle(client, {
          schema,
-         // casing: "snake_case",
+         casing: "camelCase",
       })
 
       c.set("db", db)

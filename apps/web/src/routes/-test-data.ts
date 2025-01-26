@@ -1,4 +1,4 @@
-import type { Medium, Message, User } from "@project/cache/schema"
+import type { Medium, User } from "@project/cache/schema"
 import { randBetween, randID, randInt } from "./-rand"
 
 const requests = [
@@ -24,7 +24,7 @@ const replies = [
 export function randomMessage(
    users: readonly User[],
    mediums: readonly Medium[],
-): Message {
+) {
    const id = randID()
    const mediumId = mediums[randInt(mediums.length)]?.id
    const timestamp = randBetween(1727395200000, new Date().getTime())
@@ -34,6 +34,7 @@ export function randomMessage(
    const senderId = senders[randInt(senders.length)]?.id
    const body = messages[randInt(messages.length)]
    if (!senderId || !mediumId || !body) throw new Error("No sender or medium")
+
    return {
       id,
       senderId,

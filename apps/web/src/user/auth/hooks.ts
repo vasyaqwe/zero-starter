@@ -4,8 +4,8 @@ import useSWR from "swr"
 
 export function useAuth() {
    const user = useSWR(
-      hc.api.auth.me.$url(),
-      honoQueryFn(async () => await hc.api.auth.me.$get()),
+      hc.v1.auth.me.$url(),
+      honoQueryFn(async () => await hc.v1.auth.me.$get()),
       {
          shouldRetryOnError: false,
          revalidateOnFocus: false,
@@ -15,7 +15,7 @@ export function useAuth() {
    const navigate = useNavigate()
 
    const logout = async () => {
-      await hc.api.auth.logout.$post()
+      await hc.v1.auth.logout.$post()
       user.mutate().then(() => navigate({ to: "/login" }))
    }
 

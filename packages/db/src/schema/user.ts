@@ -1,7 +1,7 @@
-import { boolean, text, uniqueIndex } from "drizzle-orm/pg-core"
+import { boolean, primaryKey, text, uniqueIndex } from "drizzle-orm/pg-core"
 import { createSelectSchema } from "drizzle-zod"
 import type { z } from "zod"
-import { createTable, lifecycleDates, tableId } from "../utils"
+import { createTable, tableId, timestamps } from "../utils"
 
 export const user = createTable(
    "user",
@@ -11,9 +11,29 @@ export const user = createTable(
       email: text().notNull().unique(),
       image: text(),
       partner: boolean().notNull().default(false),
-      ...lifecycleDates,
+      ...timestamps,
    },
-   (table) => [uniqueIndex("user_email_idx").on(table.email)],
+   (table) => [uniqueIndex().on(table.email)],
+)
+
+export const oauthProviders = ["github"] as const
+
+export const oauthAccount = createTable(
+   "oauth_account",
+   {
+      userId: text()
+         .references(() => user.id, { onDelete: "cascade" })
+         .notNull(),
+      providerId: text({
+         enum: oauthProviders,
+      }).notNull(),
+      providerUserId: text().notNull().unique(),
+   },
+   (table) => [
+      primaryKey({
+         columns: [table.providerId, table.providerUserId],
+      }),
+   ],
 )
 
 export const userSelectSchema = createSelectSchema(user).omit({

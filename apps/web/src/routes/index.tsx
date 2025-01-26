@@ -1,3 +1,4 @@
+import { hc } from "@/lib/hono"
 import { useZero } from "@/lib/zero/hooks"
 import { auth } from "@/user/auth/client"
 import { useAuth } from "@/user/auth/hooks"
@@ -123,7 +124,7 @@ function RouteComponent() {
          body: body ?? prev,
       })
    }
-   console.log(user)
+
    // If initial sync hasn't completed, these can be empty.
    if (!users.length || !mediums.length) return null
 
@@ -162,9 +163,7 @@ function RouteComponent() {
                      if (user) {
                         return await logout()
                      }
-                     const url = new URL(
-                        `http://localhost:3000/api/auth/callback`,
-                     )
+                     const url = new URL(hc.v1.auth.callback.$url())
                      // if (next) {
                      //   url.searchParams.set('next', next)
                      // }

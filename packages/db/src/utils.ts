@@ -29,13 +29,13 @@ const generateId = (prefix: keyof typeof prefixes) => {
 }
 
 const tableId = (prefix: keyof typeof prefixes) =>
-   text("id")
+   text()
       .primaryKey()
       .$defaultFn(() => generateId(prefix))
 
 const createTable = pgTable
 
-const lifecycleDates = {
+const timestamps = {
    createdAt: timestamp().$defaultFn(() => new Date()),
    updatedAt: timestamp()
       .$defaultFn(() => new Date())
@@ -48,4 +48,4 @@ const bytea = customType<{ data: Uint8Array }>({
    },
 })
 
-export { createTable, lifecycleDates, tableId, bytea }
+export { createTable, timestamps, tableId, bytea }

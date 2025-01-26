@@ -40,7 +40,7 @@ export const authRoute = createRouter()
       async (c) => {
          const code = c.req.valid("query").code
          const next = c.req.valid("query").next
-         const url = new URL(`${env(c).WEB_DOMAIN}/api/auth/callback`)
+         const url = new URL(`${env(c).WEB_DOMAIN}${c.req.path}`)
          // if (next) {
          //     url.searchParams.set('next', next)
          // }
@@ -52,12 +52,16 @@ export const authRoute = createRouter()
          setCookie(c, "access_token", exchanged.tokens.access, cookieOptions)
          setCookie(c, "refresh_token", exchanged.tokens.refresh, cookieOptions)
 
-         return c.redirect(next ?? `${env(c).WEB_DOMAIN}`)
+         return c.redirect(next ?? env(c).WEB_DOMAIN)
       },
    )
+   .get("/callback/github", async (c) => {
+      console.log(c.req.query)
+      return c.redirect(env(c).WEB_DOMAIN)
+   })
    .post("/logout", async (c) => {
       deleteCookie(c, "access_token")
       deleteCookie(c, "refresh_token")
 
-      return c.redirect(`${env(c).WEB_DOMAIN}`)
+      return c.json({ status: "ok" })
    })
