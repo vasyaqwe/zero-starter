@@ -8,9 +8,9 @@
       "types": "./dist/index.d.ts",
       "default": "./src/index.ts"
     },
-    "./auth/*": {
-      "types": "./dist/user/auth/*.d.ts",
-      "default": "./src/user/auth/*.ts"
+    "./auth/subjects": {
+      "types": "./dist/user/auth/subjects.d.ts",
+      "default": "./src/user/auth/subjects.ts"
     }
   },
   "license": "MIT",
@@ -22,8 +22,7 @@
   "dependencies": {
     "@openauthjs/openauth": "^0.3.6",
     "@project/db": "workspace:*",
-    "drizzle-orm": "^0.38.4",
-    "hono": "^4.6.12",
+    "hono": "^4.6.19",
     "jose": "^5.9.6",
     "ky": "^1.7.4",
     "pg": "^8.13.1",

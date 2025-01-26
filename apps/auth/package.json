@@ -9,7 +9,7 @@
       "@openauthjs/openauth": "^0.3.6",
       "@project/api": "workspace:*",
       "@project/db": "workspace:*",
-      "hono": "^4.6.12"
+      "hono": "^4.6.19"
    },
    "devDependencies": {
       "@cloudflare/workers-types": "^4.20250124.3",
