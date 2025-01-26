@@ -2,7 +2,7 @@
    "name": "@project/cache",
    "scripts": {
       "dev:cache": "zero-cache-dev -p src/schema.ts",
-      "build:cache": "cd ./src && zero-build-schema -p ./schema.ts",
+      "build:cache": "zero-build-schema -p src/schema.ts",
       "typecheck": "tsc --noEmit"
    },
    "exports": {
@@ -13,10 +13,11 @@
    },
    "dependencies": {
       "@project/db": "workspace:*",
-      "@rocicorp/zero": "^0.11.2025011402",
-      "drizzle-zero": "^0.2.4"
+      "@rocicorp/zero": "^0.12.2025012501",
+      "drizzle-zero": "^0.3.0"
    },
    "devDependencies": {
-      "@project/tsconfig": "workspace:*"
+      "@project/tsconfig": "workspace:*",
+      "@types/node": "^20.12.9"
    }
 }

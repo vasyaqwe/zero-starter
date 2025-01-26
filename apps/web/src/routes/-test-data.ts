@@ -27,10 +27,7 @@ export function randomMessage(
 ): Message {
    const id = randID()
    const mediumId = mediums[randInt(mediums.length)]?.id
-   const timestamp = randBetween(
-      1727395200000,
-      new Date().getTime(),
-   ).toLocaleString()
+   const timestamp = randBetween(1727395200000, new Date().getTime())
    const isRequest = randInt(10) <= 6
    const messages = isRequest ? requests : replies
    const senders = users.filter((u) => u.partner === !isRequest)

@@ -15,8 +15,8 @@ export const ALLOWED_ORIGINS = ["https://www.project.io", "https://project.io"]
 
 type Env = {
    ENVIRONMENT: "production" | "development"
-   WEB_DOMAIN: string
    SERVER_DOMAIN: string
+   WEB_DOMAIN: string
    DATABASE_URL: string
    GITHUB_CLIENT_ID: string
    GITHUB_CLIENT_SECRET: string

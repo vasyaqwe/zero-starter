@@ -1,6 +1,7 @@
+import { env } from "@/env"
 import { createClient } from "@openauthjs/openauth/client"
 
 export const auth = createClient({
    clientID: "project",
-   issuer: "http://localhost:8080",
+   issuer: env.AUTH_DOMAIN,
 })

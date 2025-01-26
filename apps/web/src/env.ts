@@ -1,9 +1,13 @@
 const envBase = {
    development: {
       SERVER_DOMAIN: "http://localhost:8787",
+      CACHE_DOMAIN: "http://localhost:4848",
+      AUTH_DOMAIN: "http://localhost:8080",
    },
    production: {
-      SERVER_DOMAIN: "http://localhost:8787",
+      SERVER_DOMAIN: "https://api.project.com",
+      CACHE_DOMAIN: "https://cache.project.com",
+      AUTH_DOMAIN: "https://auth.project.com",
    },
 } as const
 

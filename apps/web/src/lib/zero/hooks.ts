@@ -1,3 +1,4 @@
+import { env } from "@/env"
 import { useAuth } from "@/user/auth/hooks"
 import type { Schema } from "@project/cache/schema"
 import { schema } from "@project/cache/schema"
@@ -13,7 +14,7 @@ const createZero = ({
    new Zero({
       userID: userId,
       auth,
-      server: "http://localhost:4848",
+      server: env.CACHE_DOMAIN,
       schema,
       kvStore: import.meta.env.MODE === "development" ? "mem" : "idb",
    })

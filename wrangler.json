@@ -10,17 +10,17 @@
    "vars": {
       "ENVIRONMENT": "development",
       "SERVER_DOMAIN": "http://localhost:8787",
-      "WEB_DOMAIN": "http://localhost:3000",
       "AUTH_DOMAIN": "http://localhost:8080",
+      "WEB_DOMAIN": "http://localhost:3000",
       "CLOUDFLARE_ACCOUNT_ID": "bfef1e994f1aac7e7a42dc4ba75197a0"
    },
    "env": {
       "production": {
          "vars": {
             "ENVIRONMENT": "production",
-            "SERVER_DOMAIN": "https://dev-api.project.com",
-            "WEB_DOMAIN": "https://dev-app.project.com",
-            "AUTH_DOMAIN": "https://dev-auth.project.com",
+            "SERVER_DOMAIN": "https://api.project.com",
+            "AUTH_DOMAIN": "https://auth.project.com",
+            "WEB_DOMAIN": "https://app.project.com",
             "CLOUDFLARE_ACCOUNT_ID": "bfef1e994f1aac7e7a42dc4ba75197a0"
          }
       }
