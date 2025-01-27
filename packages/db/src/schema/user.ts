@@ -1,3 +1,4 @@
+import { relations } from "drizzle-orm"
 import { boolean, primaryKey, text, uniqueIndex } from "drizzle-orm/pg-core"
 import { createSelectSchema } from "drizzle-zod"
 import type { z } from "zod"
@@ -19,7 +20,7 @@ export const user = createTable(
 export const oauthProviders = ["github"] as const
 
 export const oauthAccount = createTable(
-   "oauth_account",
+   "oauthAccount",
    {
       userId: text()
          .references(() => user.id, { onDelete: "cascade" })
@@ -35,6 +36,13 @@ export const oauthAccount = createTable(
       }),
    ],
 )
+
+export const oauthAccountRelations = relations(oauthAccount, ({ one }) => ({
+   user: one(user, {
+      fields: [oauthAccount.userId],
+      references: [user.id],
+   }),
+}))
 
 export const userSelectSchema = createSelectSchema(user).omit({
    createdAt: true,

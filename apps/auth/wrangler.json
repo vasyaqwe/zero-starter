@@ -14,12 +14,14 @@
       }
    ],
    "vars": {
-      "ENVIRONMENT": "development"
+      "ENVIRONMENT": "development",
+      "WEB_DOMAIN": "http://localhost:3000"
    },
    "env": {
       "production": {
          "vars": {
-            "ENVIRONMENT": "production"
+            "ENVIRONMENT": "production",
+            "WEB_DOMAIN": "https://app.project.com"
          }
       }
    }

@@ -17,9 +17,8 @@ export const zValidator = <
       try {
          return (await schema.parseAsync(value)) as z.infer<T>
       } catch (error) {
-         console.error(error)
-
          if (error instanceof ZodError) {
+            console.error(400, parseZodErrorIssues(error.issues))
             return c.json(
                {
                   code: "BAD_REQUEST",
@@ -29,13 +28,16 @@ export const zValidator = <
             )
          }
 
+         const message =
+            error instanceof Error
+               ? (error.message ?? "Unknown error")
+               : "Unknown error"
+
+         console.error(500, message)
          return c.json(
             {
                code: "INTERNAL_SERVER_ERROR",
-               message:
-                  error instanceof Error
-                     ? (error.message ?? "Unknown error")
-                     : "Unknown error",
+               message: message,
             },
             500,
          )

@@ -1,7 +1,8 @@
-import {} from "@/lib/hono"
 import { usePassJWTToZero, useZeroEmit, zero } from "@/lib/zero/hooks"
+import { contentReadyAtom } from "@/ui/store"
 import { ZeroProvider } from "@rocicorp/zero/react"
 import { Outlet, createRootRoute, useMatches } from "@tanstack/react-router"
+import { useAtomValue } from "jotai"
 import { useTheme } from "next-themes"
 import * as React from "react"
 
@@ -27,11 +28,15 @@ function RootComponent() {
    useZeroEmit((next) => setZeroInstance(next))
    usePassJWTToZero()
 
+   const contentReady = useAtomValue(contentReadyAtom)
+
    return (
       <ZeroProvider zero={zeroInstance}>
          <Meta>
             {/* <Toaster /> */}
-            <Outlet />
+            <div style={{ visibility: contentReady ? "visible" : "hidden" }}>
+               <Outlet />
+            </div>
          </Meta>
       </ZeroProvider>
    )

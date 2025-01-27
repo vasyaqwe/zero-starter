@@ -4,14 +4,18 @@ import { GithubProvider } from "@openauthjs/openauth/provider/github"
 import { CloudflareStorage } from "@openauthjs/openauth/storage/cloudflare"
 import { CodeUI } from "@openauthjs/openauth/ui/code"
 import { subjects } from "@project/api/auth/subjects"
+import { handleAuthError } from "@project/api/auth/utils"
+import { and, eq } from "@project/db"
 import { type Database, initDb } from "@project/db/client"
-import { user } from "@project/db/schema/user"
+import { oauthAccount, user } from "@project/db/schema/user"
 import { Hono } from "hono"
 import { env } from "hono/adapter"
+import { HTTPException } from "hono/http-exception"
 import { logger } from "hono/logger"
 
 type Env = {
    ENVIRONMENT: "production" | "development"
+   WEB_DOMAIN: string
    DATABASE_URL: string
    GITHUB_CLIENT_ID: string
    GITHUB_CLIENT_SECRET: string
@@ -30,8 +34,8 @@ const app = new Hono<{
 
       await next()
    })
-   .all("*", async (c) => {
-      return issuer({
+   .all("*", async (c) =>
+      issuer({
          storage: CloudflareStorage({
             namespace: c.env.KV,
          }),
@@ -51,61 +55,175 @@ const app = new Hono<{
          },
          subjects,
          async success(ctx, value) {
-            if (value.provider === "code") {
-               const email = value.claims.email
-               if (!email) throw new Error("email not found in claims")
-
-               let foundUser = await c.var.db.query.user.findFirst({
-                  where: (table, { eq }) => eq(table.email, email),
-                  columns: {
-                     id: true,
-                     email: true,
-                     name: true,
-                     partner: true,
-                     image: true,
-                  },
-               })
-
-               if (!foundUser) {
-                  const [createdUser] = await c.var.db
-                     .insert(user)
-                     .values({ email: email, name: "" })
-                     .returning({
-                        id: user.id,
-                        email: user.email,
-                        name: user.name,
-                        partner: user.partner,
-                        image: user.image,
+            try {
+               if (value.provider === "code") {
+                  const email = value.claims.email
+                  if (!email)
+                     throw new HTTPException(400, {
+                        message: "email not found in claims",
                      })
-                  foundUser = createdUser
+
+                  let foundUser = await c.var.db.query.user.findFirst({
+                     where: eq(user.email, email),
+                     columns: {
+                        id: true,
+                        email: true,
+                        name: true,
+                        partner: true,
+                        image: true,
+                     },
+                  })
+
+                  if (!foundUser) {
+                     const [createdUser] = await c.var.db
+                        .insert(user)
+                        .values({ email: email, name: "" })
+                        .returning({
+                           id: user.id,
+                           email: user.email,
+                           name: user.name,
+                           partner: user.partner,
+                           image: user.image,
+                        })
+                     if (!createdUser)
+                        throw new HTTPException(500, {
+                           message: "Couldn't create user",
+                        })
+
+                     foundUser = createdUser
+                  }
+
+                  return ctx.subject("user", foundUser)
                }
+               if (value.provider === "github") {
+                  const res = await fetch("https://api.github.com/user", {
+                     headers: {
+                        Authorization: `Bearer ${value.tokenset.access}`,
+                        "User-Agent": "hobby/1.0",
+                     },
+                  })
+                  if (!res.ok)
+                     throw new HTTPException(400, {
+                        message: await res.text(),
+                     })
 
-               if (!foundUser) throw new Error("User not found")
+                  const githubUserProfile = (await res.json()) as {
+                     id: number
+                     email: string | null
+                     name?: string | undefined
+                     avatar_url?: string | undefined
+                     login: string
+                     verified: boolean
+                  }
 
-               return ctx.subject("user", foundUser)
-            }
-            if (value.provider === "github") {
-               const userProfile = await fetch("https://api.github.com/user", {
-                  headers: {
-                     Authorization: `Bearer ${value.tokenset.access}`,
-                  },
+                  const existingAccount =
+                     await c.var.db.query.oauthAccount.findFirst({
+                        where: and(
+                           eq(oauthAccount.providerId, "github"),
+                           eq(
+                              oauthAccount.providerUserId,
+                              githubUserProfile.id.toString(),
+                           ),
+                        ),
+                        with: {
+                           user: {
+                              columns: {
+                                 id: true,
+                                 email: true,
+                                 name: true,
+                                 partner: true,
+                                 image: true,
+                              },
+                           },
+                        },
+                     })
+
+                  if (existingAccount)
+                     return ctx.subject("user", existingAccount.user)
+
+                  //  email can be null if user has made it private.
+                  if (!githubUserProfile.email) {
+                     const res = await fetch(
+                        "https://api.github.com/user/emails",
+                        {
+                           headers: {
+                              Authorization: `Bearer ${value.tokenset.access}`,
+                              "User-Agent": "hobby/1.0",
+                           },
+                        },
+                     )
+                     if (!res.ok)
+                        throw new HTTPException(400, {
+                           message: await res.text(),
+                        })
+
+                     const emails = (await res.json()) as {
+                        email: string
+                        primary: boolean
+                        verified: boolean
+                        visibility: string
+                     }[]
+
+                     const primaryEmail = emails.find((email) => email.primary)
+
+                     if (primaryEmail) {
+                        githubUserProfile.email = primaryEmail.email
+                        githubUserProfile.verified = primaryEmail.verified
+                     } else if (emails.length > 0 && emails[0]?.email) {
+                        githubUserProfile.email = emails[0].email
+                        githubUserProfile.verified = emails[0].verified
+                     }
+                  }
+
+                  const githubEmail = githubUserProfile.email
+
+                  if (!githubEmail)
+                     throw new HTTPException(400, {
+                        message: "No email found in github user profile",
+                     })
+
+                  // If no existing account check if the a user with the email exists and link the account.
+                  const result = await c.var.db.transaction(async (tx) => {
+                     const [newUser] = await tx
+                        .insert(user)
+                        .values({
+                           email: githubEmail,
+                           name:
+                              githubUserProfile.name ?? githubUserProfile.login,
+                           image: githubUserProfile.avatar_url,
+                        })
+                        .returning({
+                           id: user.id,
+                           email: user.email,
+                           name: user.name,
+                           partner: user.partner,
+                           image: user.image,
+                        })
+
+                     if (!newUser)
+                        throw new HTTPException(500, {
+                           message: "Couldn't create user",
+                        })
+
+                     await tx.insert(oauthAccount).values({
+                        providerId: "github",
+                        providerUserId: githubUserProfile.id.toString(),
+                        userId: newUser.id,
+                     })
+
+                     return { newUser }
+                  })
+
+                  return ctx.subject("user", result.newUser)
+               }
+               throw new HTTPException(400, {
+                  message: "Invalid provider",
                })
-
-               const _githubUserProfile = (await userProfile.json()) as {
-                  id: number
-                  email: string
-                  name?: string
-                  avatar_url?: string
-                  login: string
-                  verified: boolean
-               }
-
-               throw new Error("Not implemented")
+            } catch (error) {
+               return handleAuthError(error as Error, c)
             }
-
-            throw new Error("Invalid provider")
          },
-      }).fetch(c.req.raw, c.env, c.executionCtx)
-   })
+      }).fetch(c.req.raw, c.env, c.executionCtx),
+   )
 
 export default app

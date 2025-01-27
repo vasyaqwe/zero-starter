@@ -11,6 +11,10 @@
     "./auth/subjects": {
       "types": "./dist/user/auth/subjects.d.ts",
       "default": "./src/user/auth/subjects.ts"
+    },
+    "./auth/utils": {
+      "types": "./dist/user/auth/utils.d.ts",
+      "default": "./src/user/auth/utils.ts"
     }
   },
   "license": "MIT",

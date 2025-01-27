@@ -1,24 +1,24 @@
 import { hc } from "@/lib/hono"
+import { contentReadyAtom } from "@/ui/store"
 import { auth } from "@/user/auth/client"
 import { createFileRoute } from "@tanstack/react-router"
+import { useSetAtom } from "jotai"
 
 export const Route = createFileRoute("/login")({
    component: RouteComponent,
 })
 
 function RouteComponent() {
+   const setContentReady = useSetAtom(contentReadyAtom)
+   setContentReady(true)
+
    return (
       <div>
          Hello "/login"!
          <button
             onMouseDown={async () => {
-               const url = new URL(hc.v1.auth.callback.$url())
-               // if (next) {
-               //   url.searchParams.set('next', next)
-               // }
-
                const { url: authUrl } = await auth.authorize(
-                  url.toString(),
+                  hc.v1.auth.callback.$url().toString(),
                   "code",
                )
 
@@ -29,9 +29,8 @@ function RouteComponent() {
          </button>
          <button
             onMouseDown={async () => {
-               const url = new URL(hc.v1.auth.callback.github.$url())
                const { url: authUrl } = await auth.authorize(
-                  url.toString(),
+                  hc.v1.auth.callback.github.$url().toString(),
                   "code",
                )
 

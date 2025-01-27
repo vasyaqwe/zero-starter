@@ -1,7 +1,7 @@
 import { createRouter, zValidator } from "@project/api/misc/utils"
 import { auth, cookieOptions } from "@project/api/user/auth"
 import { authMiddleware } from "@project/api/user/auth/middleware"
-import { createJwt } from "@project/api/user/auth/utils"
+import { createJwt, handleAuthError } from "@project/api/user/auth/utils"
 import { eq } from "@project/db"
 import { user } from "@project/db/schema/user"
 import { env } from "hono/adapter"
@@ -34,34 +34,53 @@ export const authRoute = createRouter()
          "query",
          z.object({
             code: z.string(),
-            next: z.string().optional(),
          }),
       ),
       async (c) => {
          const code = c.req.valid("query").code
-         const next = c.req.valid("query").next
-         const url = new URL(`${env(c).WEB_DOMAIN}${c.req.path}`)
-         // if (next) {
-         //     url.searchParams.set('next', next)
-         // }
 
-         const exchanged = await auth(c).exchange(code, url.toString())
+         const exchanged = await auth(c).exchange(
+            code,
+            `${env(c).WEB_DOMAIN}${c.req.path}`,
+         )
 
          if (exchanged.err) throw new HTTPException(400, exchanged.err)
 
          setCookie(c, "access_token", exchanged.tokens.access, cookieOptions)
          setCookie(c, "refresh_token", exchanged.tokens.refresh, cookieOptions)
 
-         return c.redirect(next ?? env(c).WEB_DOMAIN)
+         return c.redirect(env(c).WEB_DOMAIN)
       },
    )
-   .get("/callback/github", async (c) => {
-      console.log(c.req.query)
-      return c.redirect(env(c).WEB_DOMAIN)
-   })
+   .get(
+      "/callback/github",
+      zValidator(
+         "query",
+         z.object({
+            code: z.string(),
+            state: z.string().optional(),
+         }),
+      ),
+      async (c) => {
+         const code = c.req.valid("query").code
+
+         const exchanged = await auth(c).exchange(
+            code,
+            `${env(c).WEB_DOMAIN}${c.req.path}`,
+         )
+
+         if (exchanged.err) throw new HTTPException(400, exchanged.err)
+
+         setCookie(c, "access_token", exchanged.tokens.access, cookieOptions)
+         setCookie(c, "refresh_token", exchanged.tokens.refresh, cookieOptions)
+
+         return c.redirect(env(c).WEB_DOMAIN)
+      },
+   )
    .post("/logout", async (c) => {
       deleteCookie(c, "access_token")
       deleteCookie(c, "refresh_token")
 
       return c.json({ status: "ok" })
    })
+   .onError(handleAuthError)

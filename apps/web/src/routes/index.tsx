@@ -1,10 +1,12 @@
 import { hc } from "@/lib/hono"
 import { useZero } from "@/lib/zero/hooks"
+import { contentReadyAtom } from "@/ui/store"
 import { auth } from "@/user/auth/client"
 import { useAuth } from "@/user/auth/hooks"
 import { escapeLike } from "@rocicorp/zero"
 import { useQuery } from "@rocicorp/zero/react"
 import { createFileRoute } from "@tanstack/react-router"
+import { useSetAtom } from "jotai"
 import { type MouseEvent, useRef, useState } from "react"
 import { formatDate } from "./-date"
 import { randInt } from "./-rand"
@@ -24,7 +26,12 @@ function RouteComponent() {
    const [filterUser, setFilterUser] = useState<string>("")
    const [filterText, setFilterText] = useState<string>("")
 
-   const [allMessages] = useQuery(z.query.message)
+   const setContentReady = useSetAtom(contentReadyAtom)
+
+   const [allMessages, allMessagesResult] = useQuery(z.query.message)
+   if (allMessages.length > 0 || allMessagesResult.type === "complete") {
+      setContentReady(true)
+   }
 
    let filtered = z.query.message
       .related("medium", (medium) => medium.one())
@@ -124,9 +131,6 @@ function RouteComponent() {
          body: body ?? prev,
       })
    }
-
-   // If initial sync hasn't completed, these can be empty.
-   if (!users.length || !mediums.length) return null
 
    return (
       <>

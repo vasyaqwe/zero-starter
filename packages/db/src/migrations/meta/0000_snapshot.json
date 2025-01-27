@@ -1,11 +1,11 @@
 {
-  "id": "36a2d1e2-f2d6-4f73-8952-7990d15b4237",
+  "id": "05dcc6b1-2973-453b-8a39-ba28a9921b3a",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
-    "public.oauth_account": {
-      "name": "oauth_account",
+    "public.oauthAccount": {
+      "name": "oauthAccount",
       "schema": "",
       "columns": {
         "userId": {
@@ -29,9 +29,9 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "oauth_account_userId_user_id_fk": {
-          "name": "oauth_account_userId_user_id_fk",
-          "tableFrom": "oauth_account",
+        "oauthAccount_userId_user_id_fk": {
+          "name": "oauthAccount_userId_user_id_fk",
+          "tableFrom": "oauthAccount",
           "tableTo": "user",
           "columnsFrom": [
             "userId"
@@ -44,8 +44,8 @@
         }
       },
       "compositePrimaryKeys": {
-        "oauth_account_providerId_providerUserId_pk": {
-          "name": "oauth_account_providerId_providerUserId_pk",
+        "oauthAccount_providerId_providerUserId_pk": {
+          "name": "oauthAccount_providerId_providerUserId_pk",
           "columns": [
             "providerId",
             "providerUserId"
@@ -53,8 +53,8 @@
         }
       },
       "uniqueConstraints": {
-        "oauth_account_providerUserId_unique": {
-          "name": "oauth_account_providerUserId_unique",
+        "oauthAccount_providerUserId_unique": {
+          "name": "oauthAccount_providerUserId_unique",
           "nullsNotDistinct": false,
           "columns": [
             "providerUserId"

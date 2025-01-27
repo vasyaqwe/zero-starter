@@ -1,4 +1,4 @@
-import type { AuthedHonoEnv } from "@project/api/context"
+import type { AuthedHonoEnv, HonoEnv } from "@project/api/context"
 import type { Context } from "hono"
 import { env } from "hono/adapter"
 import { SignJWT } from "jose"
@@ -18,4 +18,14 @@ export const createJwt = async ({
       .sign(new TextEncoder().encode(env(c).ZERO_AUTH_SECRET))
 
    return jwt
+}
+
+export const handleAuthError = (error: Error, c: Context<HonoEnv>) => {
+   console.error(error.message)
+
+   const newRedirectUrl = new URL(`${env(c).WEB_DOMAIN}/login`)
+
+   newRedirectUrl.searchParams.append("error", "true")
+
+   return c.redirect(newRedirectUrl.toString())
 }
