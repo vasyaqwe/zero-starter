@@ -1,4 +1,4 @@
-import { usePassJWTToZero, useZeroEmit, zero } from "@/lib/zero/hooks"
+import { usePassJWTToZero, useZeroEmit, zero } from "@/lib/zero"
 import { contentReadyAtom } from "@/ui/store"
 import { ZeroProvider } from "@rocicorp/zero/react"
 import { Outlet, createRootRoute, useMatches } from "@tanstack/react-router"

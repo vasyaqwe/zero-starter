@@ -1,6 +1,7 @@
 import baseX from "base-x"
 import { customType, pgTable, text, timestamp } from "drizzle-orm/pg-core"
 const b58 = baseX("123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz")
+import crypto from "node:crypto"
 
 const prefixes = {
    user: "usr",

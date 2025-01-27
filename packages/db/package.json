@@ -24,7 +24,6 @@
          "default": "./src/schema/*.ts"
       }
    },
-   "license": "MIT",
    "scripts": {
       "build": "tsc",
       "clean": "rm -rf .turbo node_modules",
@@ -43,6 +42,7 @@
    },
    "devDependencies": {
       "@project/tsconfig": "workspace:*",
-      "drizzle-kit": "^0.30.1"
+      "drizzle-kit": "^0.30.1",
+      "@types/node": "^20.12.9"
    }
 }

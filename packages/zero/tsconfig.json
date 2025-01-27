@@ -4,5 +4,5 @@
       "types": ["node"],
       "tsBuildInfoFile": "node_modules/.cache/tsbuildinfo.json"
    },
-   "include": ["src", "drizzle.config.ts"]
+   "include": ["src"]
 }

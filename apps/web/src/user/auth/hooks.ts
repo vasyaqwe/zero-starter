@@ -1,11 +1,11 @@
 import { hc, honoQueryFn } from "@/lib/hono"
+import { useSWR } from "@/lib/swr"
 import { useNavigate } from "@tanstack/react-router"
-import useSWR from "swr"
 
 export function useAuth() {
    const user = useSWR(
-      hc.auth.me.$url(),
-      honoQueryFn(async () => await hc.auth.me.$get()),
+      hc.auth.me.$url().toString(),
+      honoQueryFn(() => hc.auth.me.$get()),
       {
          shouldRetryOnError: false,
          revalidateOnFocus: false,

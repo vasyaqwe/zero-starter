@@ -12,9 +12,8 @@
       }
    },
    "dependencies": {
-      "@project/db": "workspace:*",
       "@rocicorp/zero": "^0.12.2025012501",
-      "drizzle-zero": "^0.3.0"
+      "@project/zero": "workspace:*"
    },
    "devDependencies": {
       "@project/tsconfig": "workspace:*",

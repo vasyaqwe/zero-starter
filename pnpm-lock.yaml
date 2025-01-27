@@ -48,15 +48,12 @@ importers:
 
   apps/cache:
     dependencies:
-      '@project/db':
+      '@project/zero':
         specifier: workspace:*
-        version: link:../../packages/db
+        version: link:../../packages/zero
       '@rocicorp/zero':
         specifier: ^0.12.2025012501
         version: 0.12.2025012501
-      drizzle-zero:
-        specifier: ^0.3.0
-        version: 0.3.0(@rocicorp/zero@0.12.2025012501)(drizzle-orm@0.38.4(@cloudflare/workers-types@4.20250124.3)(@neondatabase/serverless@0.10.4)(@opentelemetry/api@1.9.0)(@types/pg@8.11.6)(@types/react@19.0.8)(kysely@0.27.5)(pg@8.13.1)(postgres@3.4.5)(react@19.0.0))
     devDependencies:
       '@project/tsconfig':
         specifier: workspace:*
@@ -86,12 +83,12 @@ importers:
       '@openauthjs/openauth':
         specifier: ^0.3.6
         version: 0.3.6(arctic@2.3.4)(hono@4.6.19)
-      '@project/cache':
-        specifier: workspace:*
-        version: link:../cache
       '@project/env':
         specifier: workspace:*
         version: link:../../packages/env
+      '@project/zero':
+        specifier: workspace:*
+        version: link:../../packages/zero
       '@rocicorp/zero':
         specifier: ^0.12.2025012501
         version: 0.12.2025012501
@@ -201,15 +198,6 @@ importers:
       jose:
         specifier: ^5.9.6
         version: 5.9.6
-      ky:
-        specifier: ^1.7.4
-        version: 1.7.4
-      pg:
-        specifier: ^8.13.1
-        version: 8.13.1
-      remeda:
-        specifier: ^2.17.4
-        version: 2.20.0
       zod:
         specifier: ^3.23.8
         version: 3.24.1
@@ -242,6 +230,9 @@ importers:
       '@project/tsconfig':
         specifier: workspace:*
         version: link:../../tooling/typescript
+      '@types/node':
+        specifier: ^20.12.9
+        version: 20.17.16
       drizzle-kit:
         specifier: ^0.30.1
         version: 0.30.2
@@ -251,6 +242,25 @@ importers:
       '@project/tsconfig':
         specifier: workspace:*
         version: link:../../tooling/typescript
+
+  packages/zero:
+    dependencies:
+      '@project/db':
+        specifier: workspace:*
+        version: link:../db
+      '@rocicorp/zero':
+        specifier: ^0.12.2025012501
+        version: 0.12.2025012501
+      drizzle-zero:
+        specifier: ^0.3.0
+        version: 0.3.0(@rocicorp/zero@0.12.2025012501)(drizzle-orm@0.38.4(@cloudflare/workers-types@4.20250124.3)(@neondatabase/serverless@0.10.4)(@opentelemetry/api@1.9.0)(@types/pg@8.11.6)(@types/react@19.0.8)(kysely@0.27.5)(pg@8.13.1)(postgres@3.4.5)(react@19.0.0))
+    devDependencies:
+      '@project/tsconfig':
+        specifier: workspace:*
+        version: link:../../tooling/typescript
+      '@types/node':
+        specifier: ^20.12.9
+        version: 20.17.16
 
   tooling/github: {}
 
@@ -2367,10 +2377,6 @@ packages:
 
   kasi@1.1.1:
     resolution: {integrity: sha512-pzBwGWFIjf84T/8aD0XzMli1T3Ckr/jVLh6v0Jskwiv5ehmcgDM+vpYFSk8WzGn4ed4HqgaifTgQUHzzZHa+Qw==}
-
-  ky@1.7.4:
-    resolution: {integrity: sha512-zYEr/gh7uLW2l4su11bmQ2M9xLgQLjyvx58UyNM/6nuqyWFHPX5ktMjvpev3F8QWdjSsHUpnWew4PBCswBNuMQ==}
-    engines: {node: '>=18'}
 
   kysely@0.27.5:
     resolution: {integrity: sha512-s7hZHcQeSNKpzCkHRm8yA+0JPLjncSWnjb+2TIElwS2JAqYr+Kv3Ess+9KFfJS0C1xcQ1i9NkNHpWwCYpHMWsA==}
@@ -4890,8 +4896,6 @@ snapshots:
   json5@2.2.3: {}
 
   kasi@1.1.1: {}
-
-  ky@1.7.4: {}
 
   kysely@0.27.5:
     optional: true

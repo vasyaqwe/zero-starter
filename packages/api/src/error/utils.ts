@@ -70,14 +70,13 @@ export const parseZodErrorIssues = (issues: ZodIssue[]): string => {
 }
 
 export const handleError = (error: Error, c: Context<HonoEnv>) => {
-   // c.var.sentry.captureException(error)
-
    if (error instanceof ZodError) {
-      console.error(parseZodErrorIssues(error.issues))
+      const message = parseZodErrorIssues(error.issues)
+      console.error(message)
       return c.json(
          {
-            code: "BAD_REQUEST",
-            message: parseZodErrorIssues(error.issues),
+            code: statusToCode(400),
+            message: message,
          },
          400,
       )
@@ -93,11 +92,16 @@ export const handleError = (error: Error, c: Context<HonoEnv>) => {
       )
    }
 
-   console.error(500, error.message)
+   const message =
+      error instanceof Error
+         ? (error.message ?? "Unknown error")
+         : "Unknown error"
+
+   console.error(500, message)
    return c.json(
       {
-         code: "INTERNAL_SERVER_ERROR",
-         message: error.message ?? "Unknown error",
+         code: statusToCode(500),
+         message: message,
       },
       500,
    )

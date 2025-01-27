@@ -1,5 +1,5 @@
 import { hc } from "@/lib/hono"
-import { useZero } from "@/lib/zero/hooks"
+import { useZero } from "@/lib/zero"
 import { contentReadyAtom } from "@/ui/store"
 import { auth } from "@/user/auth/client"
 import { useAuth } from "@/user/auth/hooks"

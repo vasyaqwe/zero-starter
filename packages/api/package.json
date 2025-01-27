@@ -20,6 +20,10 @@
       "types": "./dist/env.d.ts",
       "default": "./src/env.ts"
     },
+    "./error/utils": {
+      "types": "./dist/error/utils.d.ts",
+      "default": "./src/error/utils.ts"
+    },
     "./auth/subjects": {
       "types": "./dist/user/auth/subjects.d.ts",
       "default": "./src/user/auth/subjects.ts"
@@ -29,7 +33,6 @@
       "default": "./src/user/auth/utils.ts"
     }
   },
-  "license": "MIT",
   "scripts": {
     "build": "tsc",
     "clean": "rm -rf .turbo node_modules",
@@ -41,9 +44,6 @@
     "@project/env": "workspace:*",
     "hono": "^4.6.19",
     "jose": "^5.9.6",
-    "ky": "^1.7.4",
-    "pg": "^8.13.1",
-    "remeda": "^2.17.4",
     "zod": "^3.23.8"
   },
   "devDependencies": {
