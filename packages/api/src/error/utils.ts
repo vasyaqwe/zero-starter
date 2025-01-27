@@ -76,7 +76,7 @@ export const handleError = (error: Error, c: Context<HonoEnv>) => {
       return c.json(
          {
             code: statusToCode(400),
-            message: message,
+            message,
          },
          400,
       )
@@ -101,7 +101,7 @@ export const handleError = (error: Error, c: Context<HonoEnv>) => {
    return c.json(
       {
          code: statusToCode(500),
-         message: message,
+         message,
       },
       500,
    )
