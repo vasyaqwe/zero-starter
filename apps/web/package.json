@@ -16,6 +16,7 @@
   "dependencies": {
     "@openauthjs/openauth": "^0.3.6",
     "@project/cache": "workspace:*",
+    "@project/env": "workspace:*",
     "@rocicorp/zero": "^0.12.2025012501",
     "@tanstack/react-router": "^1.95.1",
     "@tanstack/router-plugin": "^1.95.1",

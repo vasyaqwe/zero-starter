@@ -9,16 +9,13 @@ import { and, eq } from "@project/db"
 import { type Database, initDb } from "@project/db/client"
 import { oauthAccount, user } from "@project/db/schema/user"
 import { Hono } from "hono"
-import { env } from "hono/adapter"
 import { HTTPException } from "hono/http-exception"
 import { logger } from "hono/logger"
 
-type Env = {
-   ENVIRONMENT: "production" | "development"
-   WEB_DOMAIN: string
-   DATABASE_URL: string
+type Bindings = {
    GITHUB_CLIENT_ID: string
    GITHUB_CLIENT_SECRET: string
+   DATABASE_URL: string
    KV: KVNamespace
 }
 
@@ -26,7 +23,7 @@ const app = new Hono<{
    Variables: {
       db: Database
    }
-   Bindings: Env
+   Bindings: Bindings
 }>()
    .use(logger())
    .use(async (c, next) => {
@@ -47,8 +44,8 @@ const app = new Hono<{
                }),
             ),
             github: GithubProvider({
-               clientID: env(c).GITHUB_CLIENT_ID,
-               clientSecret: env(c).GITHUB_CLIENT_SECRET,
+               clientID: c.env.GITHUB_CLIENT_ID,
+               clientSecret: c.env.GITHUB_CLIENT_SECRET,
                scopes: ["user:email"],
             }),
          },

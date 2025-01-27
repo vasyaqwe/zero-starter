@@ -1,6 +1,6 @@
-import type { Env } from "@project/api/env"
 import type { Database } from "@project/db/client"
 import type { User } from "@project/db/schema/user"
+import type { ServerEnv } from "@project/env"
 
 type Variables = {
    db: Database
@@ -9,11 +9,11 @@ type Variables = {
 type AuthVariables = { user: User }
 
 export type HonoEnv = {
-   Bindings: Env
+   Bindings: ServerEnv
    Variables: Variables
 }
 
 export type AuthedHonoEnv = {
-   Bindings: Env
+   Bindings: ServerEnv
    Variables: Variables & AuthVariables
 }

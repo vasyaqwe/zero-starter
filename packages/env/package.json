@@ -1,0 +1,21 @@
+{
+   "name": "@project/env",
+   "version": "0.1.0",
+   "private": true,
+   "type": "module",
+   "exports": {
+      ".": {
+         "types": "./dist/index.d.ts",
+         "default": "./src/index.ts"
+      }
+   },
+   "license": "MIT",
+   "scripts": {
+      "build": "tsc",
+      "clean": "rm -rf .turbo node_modules",
+      "typecheck": "tsc --noEmit --emitDeclarationOnly false"
+   },
+   "devDependencies": {
+      "@project/tsconfig": "workspace:*"
+   }
+}

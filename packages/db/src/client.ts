@@ -2,8 +2,12 @@ import { Pool } from "@neondatabase/serverless"
 import { type NeonDatabase, drizzle } from "drizzle-orm/neon-serverless"
 import * as schema from "./schema"
 
-// biome-ignore lint/suspicious/noExplicitAny: <explanation>
-export const initDb = (c: any) => {
+export const initDb = (c: {
+   // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+   get: (arg0: string) => any
+   env: { DATABASE_URL: string }
+   set: (arg0: string, arg1: string) => void
+}) => {
    let db = c.get("db")
 
    if (!db) {

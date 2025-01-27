@@ -38,6 +38,7 @@
   "dependencies": {
     "@openauthjs/openauth": "^0.3.6",
     "@project/db": "workspace:*",
+    "@project/env": "workspace:*",
     "hono": "^4.6.19",
     "jose": "^5.9.6",
     "ky": "^1.7.4",

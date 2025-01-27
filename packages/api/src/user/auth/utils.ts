@@ -1,6 +1,6 @@
 import type { AuthedHonoEnv } from "@project/api/context"
+import { env } from "@project/env"
 import type { Context } from "hono"
-import { env } from "hono/adapter"
 import { SignJWT } from "jose"
 
 export const createJwt = async ({
@@ -15,7 +15,7 @@ export const createJwt = async ({
    const jwt = await new SignJWT(jwtPayload)
       .setProtectedHeader({ alg: "HS256" })
       .setExpirationTime("1w")
-      .sign(new TextEncoder().encode(env(c).ZERO_AUTH_SECRET))
+      .sign(new TextEncoder().encode(c.env.ZERO_AUTH_SECRET))
 
    return jwt
 }

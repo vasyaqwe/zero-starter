@@ -12,17 +12,5 @@
          "binding": "KV",
          "id": "7491a3f0e3e94d48aaf96cd87197a94a"
       }
-   ],
-   "vars": {
-      "ENVIRONMENT": "development",
-      "WEB_DOMAIN": "http://localhost:3000"
-   },
-   "env": {
-      "production": {
-         "vars": {
-            "ENVIRONMENT": "production",
-            "WEB_DOMAIN": "https://app.project.com"
-         }
-      }
-   }
+   ]
 }
