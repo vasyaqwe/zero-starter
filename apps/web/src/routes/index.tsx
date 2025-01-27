@@ -167,7 +167,7 @@ function RouteComponent() {
                      if (user) {
                         return await logout()
                      }
-                     const url = new URL(hc.v1.auth.callback.$url())
+                     const url = new URL(hc.auth.callback.$url())
                      // if (next) {
                      //   url.searchParams.set('next', next)
                      // }

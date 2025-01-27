@@ -1,5 +1,6 @@
 import { createRouter, zValidator } from "@project/api/misc/utils"
-import { auth, cookieOptions } from "@project/api/user/auth"
+import { auth } from "@project/api/user/auth"
+import { cookieOptions } from "@project/api/user/auth/constants"
 import { authMiddleware } from "@project/api/user/auth/middleware"
 import { createJwt, handleAuthError } from "@project/api/user/auth/utils"
 import { eq } from "@project/db"
@@ -41,7 +42,7 @@ export const authRoute = createRouter()
 
          const exchanged = await auth(c).exchange(
             code,
-            `${env(c).WEB_DOMAIN}${c.req.path}`,
+            `${env(c).SERVER_DOMAIN}${c.req.path}`,
          )
 
          if (exchanged.err) throw new HTTPException(400, exchanged.err)
@@ -66,7 +67,7 @@ export const authRoute = createRouter()
 
          const exchanged = await auth(c).exchange(
             code,
-            `${env(c).WEB_DOMAIN}${c.req.path}`,
+            `${env(c).SERVER_DOMAIN}${c.req.path}`,
          )
 
          if (exchanged.err) throw new HTTPException(400, exchanged.err)

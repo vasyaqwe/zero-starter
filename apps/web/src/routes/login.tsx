@@ -18,7 +18,7 @@ function RouteComponent() {
          <button
             onMouseDown={async () => {
                const { url: authUrl } = await auth.authorize(
-                  hc.v1.auth.callback.$url().toString(),
+                  hc.auth.callback.$url().toString(),
                   "code",
                )
 
@@ -30,7 +30,7 @@ function RouteComponent() {
          <button
             onMouseDown={async () => {
                const { url: authUrl } = await auth.authorize(
-                  hc.v1.auth.callback.github.$url().toString(),
+                  hc.auth.callback.github.$url().toString(),
                   "code",
                )
 

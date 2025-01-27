@@ -1,5 +1,6 @@
 import type { AuthedHonoEnv } from "@project/api/context"
-import { auth, cookieOptions } from "@project/api/user/auth"
+import { auth } from "@project/api/user/auth"
+import { cookieOptions } from "@project/api/user/auth/constants"
 import { subjects } from "@project/api/user/auth/subjects"
 import { getCookie, setCookie } from "hono/cookie"
 import { createMiddleware } from "hono/factory"

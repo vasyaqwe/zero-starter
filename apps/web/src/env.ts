@@ -1,6 +1,6 @@
 const envBase = {
    development: {
-      SERVER_DOMAIN: "http://localhost:3000",
+      SERVER_DOMAIN: "http://localhost:8787",
       CACHE_DOMAIN: "http://localhost:4848",
       AUTH_DOMAIN: "http://localhost:8080",
    },

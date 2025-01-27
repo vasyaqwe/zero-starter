@@ -31,7 +31,6 @@ const app = new Hono<{
    .use(logger())
    .use(async (c, next) => {
       c.set("db", initDb(c))
-
       await next()
    })
    .all("*", async (c) =>

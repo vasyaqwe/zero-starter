@@ -8,6 +8,18 @@
       "types": "./dist/index.d.ts",
       "default": "./src/index.ts"
     },
+    "./constants": {
+      "types": "./dist/constants.d.ts",
+      "default": "./src/constants.ts"
+    },
+    "./context": {
+      "types": "./dist/context.d.ts",
+      "default": "./src/context.ts"
+    },
+    "./env": {
+      "types": "./dist/env.d.ts",
+      "default": "./src/env.ts"
+    },
     "./auth/subjects": {
       "types": "./dist/user/auth/subjects.d.ts",
       "default": "./src/user/auth/subjects.ts"
