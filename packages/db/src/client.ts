@@ -1,5 +1,7 @@
-import { Pool } from "@neondatabase/serverless"
-import { type NeonDatabase, drizzle } from "drizzle-orm/neon-serverless"
+// import { type NeonDatabase, drizzle } from "drizzle-orm/neon-serverless"
+// import { Pool } from "@neondatabase/serverless"
+import { type PostgresJsDatabase, drizzle } from "drizzle-orm/postgres-js"
+import postgres from "postgres"
 import * as schema from "./schema"
 
 export const initDb = (c: {
@@ -11,7 +13,7 @@ export const initDb = (c: {
    let db = c.get("db")
 
    if (!db) {
-      const client = new Pool({ connectionString: c.env.DATABASE_URL })
+      const client = postgres(c.env.DATABASE_URL)
       db = drizzle(client, {
          schema,
          casing: "camelCase",
@@ -23,4 +25,4 @@ export const initDb = (c: {
    return db
 }
 
-export type Database = NeonDatabase<typeof schema>
+export type Database = PostgresJsDatabase<typeof schema>

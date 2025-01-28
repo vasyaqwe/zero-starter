@@ -1,0 +1,16 @@
+app = "zero-starter"
+
+[[services]]
+  internal_port = 5432
+  protocol = "tcp"
+
+[[services.ports]]
+  handlers = ["pg_tls"]
+  port = 5432
+
+[mounts]
+source = "pg_data"
+destination = "/data"
+
+[env]
+  PRIMARY_REGION = "fra"
