@@ -1,6 +1,6 @@
 import { usePassJWTToZero, useZeroEmit, zero } from "@/lib/zero"
 import { contentReadyAtom } from "@/ui/store"
-import { ZeroProvider } from "@rocicorp/zero/react"
+import { ZeroProvider } from "@project/sync/react"
 import { Outlet, createRootRoute, useMatches } from "@tanstack/react-router"
 import { useAtomValue } from "jotai"
 import { useTheme } from "next-themes"

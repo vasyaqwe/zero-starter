@@ -1,5 +1,4 @@
 import type { AuthedHonoEnv } from "@project/api/context"
-import { handleError } from "@project/api/error/utils"
 import { env } from "@project/env"
 import type { Context } from "hono"
 import { SignJWT } from "jose"
@@ -15,7 +14,7 @@ export const createJwt = async ({
 
    const jwt = await new SignJWT(jwtPayload)
       .setProtectedHeader({ alg: "HS256" })
-      .setExpirationTime("1w")
+      .setExpirationTime("30days")
       .sign(new TextEncoder().encode(c.env.ZERO_AUTH_SECRET))
 
    return jwt
@@ -23,8 +22,6 @@ export const createJwt = async ({
 
 export const handleAuthError = (error: Error, c: Context) => {
    console.error(error.message)
-
-   if (c.req.path === "/auth/me") return handleError(error, c)
 
    const newRedirectUrl = new URL(`${env(c).WEB_DOMAIN}/login`)
 

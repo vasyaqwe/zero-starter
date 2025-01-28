@@ -48,9 +48,9 @@ importers:
 
   apps/cache:
     dependencies:
-      '@project/zero':
+      '@project/sync':
         specifier: workspace:*
-        version: link:../../packages/zero
+        version: link:../../packages/sync
       '@rocicorp/zero':
         specifier: ^0.12.2025012501
         version: 0.12.2025012501
@@ -86,12 +86,9 @@ importers:
       '@project/env':
         specifier: workspace:*
         version: link:../../packages/env
-      '@project/zero':
+      '@project/sync':
         specifier: workspace:*
-        version: link:../../packages/zero
-      '@rocicorp/zero':
-        specifier: ^0.12.2025012501
-        version: 0.12.2025012501
+        version: link:../../packages/sync
       '@tanstack/react-router':
         specifier: ^1.95.1
         version: 1.97.14(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
@@ -243,7 +240,7 @@ importers:
         specifier: workspace:*
         version: link:../../tooling/typescript
 
-  packages/zero:
+  packages/sync:
     dependencies:
       '@project/db':
         specifier: workspace:*

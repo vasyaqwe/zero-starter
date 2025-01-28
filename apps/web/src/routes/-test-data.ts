@@ -1,4 +1,4 @@
-import type { Medium, User } from "@project/zero/schema"
+import type { Medium, User } from "@project/sync/schema"
 import { randBetween, randID, randInt } from "./-rand"
 
 const requests = [

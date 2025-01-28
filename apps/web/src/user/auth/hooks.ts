@@ -4,8 +4,8 @@ import { useNavigate } from "@tanstack/react-router"
 
 export function useAuth() {
    const user = useSWR(
-      hc.auth.me.$url().toString(),
-      honoQueryFn(() => hc.auth.me.$get()),
+      hc.user.me.$url().toString(),
+      honoQueryFn(() => hc.user.me.$get()),
       {
          shouldRetryOnError: false,
          revalidateOnFocus: false,

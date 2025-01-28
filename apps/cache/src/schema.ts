@@ -1,2 +1,2 @@
-import { permissions, schema } from "@project/zero/schema"
+import { permissions, schema } from "@project/sync/schema"
 export { schema, permissions }

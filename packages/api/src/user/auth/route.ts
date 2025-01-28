@@ -1,34 +1,13 @@
 import { createRouter, zValidator } from "@project/api/misc/utils"
 import { auth } from "@project/api/user/auth"
 import { cookieOptions } from "@project/api/user/auth/constants"
-import { authMiddleware } from "@project/api/user/auth/middleware"
-import { createJwt, handleAuthError } from "@project/api/user/auth/utils"
-import { eq } from "@project/db"
-import { user } from "@project/db/schema/user"
+import { handleAuthError } from "@project/api/user/auth/utils"
 import { env } from "@project/env"
 import { deleteCookie, setCookie } from "hono/cookie"
 import { HTTPException } from "hono/http-exception"
 import { z } from "zod"
 
 export const authRoute = createRouter()
-   .get("/me", authMiddleware, async (c) => {
-      const db = c.get("db")
-
-      const [foundUser] = await db
-         .select()
-         .from(user)
-         .where(eq(user.id, c.var.user.id))
-
-      if (!foundUser) throw new HTTPException(401, { message: "Unauthorized" })
-
-      const jwt = await createJwt({ c, userId: foundUser.id })
-
-      return c.json({
-         id: foundUser.id,
-         email: foundUser.email,
-         jwt,
-      })
-   })
    .get(
       "/callback",
       zValidator(

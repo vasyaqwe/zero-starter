@@ -83,7 +83,7 @@ const app = new Hono<{
                         })
                      if (!createdUser)
                         throw new HTTPException(500, {
-                           message: "Couldn't create user",
+                           message: "Failed to create user",
                         })
 
                      foundUser = createdUser
@@ -198,7 +198,7 @@ const app = new Hono<{
 
                      if (!newUser)
                         throw new HTTPException(500, {
-                           message: "Couldn't create user",
+                           message: "Failed to create user",
                         })
 
                      await tx.insert(oauthAccount).values({

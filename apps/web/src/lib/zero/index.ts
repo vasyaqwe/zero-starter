@@ -1,9 +1,9 @@
 import { env } from "@/env"
 import { useAuth } from "@/user/auth/hooks"
-import type { Schema } from "@project/zero/schema"
-import { schema } from "@project/zero/schema"
-import { Zero } from "@rocicorp/zero"
-import { useZero as useZeroBase } from "@rocicorp/zero/react"
+import { Zero } from "@project/sync"
+import { useZero as useZeroBase } from "@project/sync/react"
+import type { Schema } from "@project/sync/schema"
+import { schema } from "@project/sync/schema"
 import { createEmitter } from "@vxrn/emitter"
 import * as React from "react"
 

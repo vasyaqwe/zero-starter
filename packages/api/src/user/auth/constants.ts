@@ -1,9 +1,9 @@
 import type { CookieOptions } from "hono/utils/cookie"
 
-export const cookieOptions: CookieOptions = {
+export const cookieOptions = {
+   path: "/",
    httpOnly: true,
    secure: true,
    sameSite: "lax",
-   path: "/",
-   maxAge: 34560000,
-}
+   maxAge: 30 * 24 * 60 * 60, // 30 days
+} satisfies CookieOptions

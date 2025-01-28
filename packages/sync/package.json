@@ -1,9 +1,17 @@
 {
-   "name": "@project/zero",
+   "name": "@project/sync",
    "version": "0.1.0",
    "private": true,
    "type": "module",
    "exports": {
+      ".": {
+         "types": "./dist/index.d.ts",
+         "default": "./src/index.ts"
+      },
+      "./react": {
+         "types": "./dist/react.d.ts",
+         "default": "./src/react.ts"
+      },
       "./schema": {
          "types": "./dist/schema.d.ts",
          "default": "./src/schema.ts"

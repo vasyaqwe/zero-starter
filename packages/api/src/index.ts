@@ -2,6 +2,7 @@ import { ALLOWED_ORIGINS } from "@project/api/constants"
 import { handleError } from "@project/api/error/utils"
 import { createRouter } from "@project/api/misc/utils"
 import { authRoute } from "@project/api/user/auth/route"
+import { userRoute } from "@project/api/user/route"
 import { initDb } from "@project/db/client"
 import { env } from "@project/env"
 import { cors } from "hono/cors"
@@ -25,11 +26,13 @@ app.use(logger())
    })
    .onError(handleError)
 
-const base = createRouter().get("/health", (c) =>
-   c.json({
-      message: "Healthy",
-   }),
-)
+const base = createRouter()
+   .get("/health", (c) =>
+      c.json({
+         message: "Healthy",
+      }),
+   )
+   .route("/user", userRoute)
 
 const auth = createRouter()
    .use((c, next) => {
