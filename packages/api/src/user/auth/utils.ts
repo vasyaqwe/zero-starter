@@ -1,5 +1,4 @@
 import type { AuthedHonoEnv } from "@project/api/context"
-import { env } from "@project/env"
 import type { Context } from "hono"
 import { SignJWT } from "jose"
 
@@ -23,7 +22,7 @@ export const createJwt = async ({
 export const handleAuthError = (error: Error, c: Context) => {
    console.error(error.message)
 
-   const newRedirectUrl = new URL(`${env(c).WEB_DOMAIN}/login`)
+   const newRedirectUrl = new URL(`${c.var.env.WEB_DOMAIN}/login`)
 
    newRedirectUrl.searchParams.append("error", "true")
 

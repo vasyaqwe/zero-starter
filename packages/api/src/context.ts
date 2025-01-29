@@ -1,9 +1,10 @@
 import type { Database } from "@project/db/client"
 import type { User } from "@project/db/schema/user"
-import type { ServerEnv } from "@project/env"
+import type { ClientEnv, ServerEnv } from "@project/env/types"
 
 type Variables = {
    db: Database
+   env: ClientEnv
 }
 
 type AuthVariables = { user: User }
