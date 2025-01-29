@@ -32,6 +32,9 @@ importers:
       '@project/db':
         specifier: workspace:*
         version: link:../../packages/db
+      '@project/env':
+        specifier: workspace:*
+        version: link:../../packages/env
       hono:
         specifier: ^4.6.19
         version: 4.6.19
@@ -217,6 +220,9 @@ importers:
       '@neondatabase/serverless':
         specifier: ^0.10.4
         version: 0.10.4
+      '@project/env':
+        specifier: workspace:*
+        version: link:../env
       base-x:
         specifier: ^5.0.0
         version: 5.0.0

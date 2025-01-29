@@ -20,7 +20,7 @@ export const authRoute = createRouter()
 
          const exchanged = await auth(c).exchange(
             code,
-            `${c.var.env.SERVER_DOMAIN}${c.req.path}`,
+            `${c.var.env.client.SERVER_DOMAIN}${c.req.path}`,
          )
 
          if (exchanged.err) throw new HTTPException(400, exchanged.err)
@@ -28,7 +28,7 @@ export const authRoute = createRouter()
          setCookie(c, "access_token", exchanged.tokens.access, cookieOptions)
          setCookie(c, "refresh_token", exchanged.tokens.refresh, cookieOptions)
 
-         return c.redirect(c.var.env.WEB_DOMAIN)
+         return c.redirect(c.var.env.client.WEB_DOMAIN)
       },
    )
    .get(
@@ -45,7 +45,7 @@ export const authRoute = createRouter()
 
          const exchanged = await auth(c).exchange(
             code,
-            `${c.var.env.SERVER_DOMAIN}${c.req.path}`,
+            `${c.var.env.client.SERVER_DOMAIN}${c.req.path}`,
          )
 
          if (exchanged.err) throw new HTTPException(400, exchanged.err)
@@ -53,7 +53,7 @@ export const authRoute = createRouter()
          setCookie(c, "access_token", exchanged.tokens.access, cookieOptions)
          setCookie(c, "refresh_token", exchanged.tokens.refresh, cookieOptions)
 
-         return c.redirect(c.var.env.WEB_DOMAIN)
+         return c.redirect(c.var.env.client.WEB_DOMAIN)
       },
    )
    .post("/logout", async (c) => {

@@ -34,6 +34,7 @@
       "studio": "pnpm drizzle-kit studio"
    },
    "dependencies": {
+      "@project/env": "workspace:*",
       "@neondatabase/serverless": "^0.10.4",
       "base-x": "^5.0.0",
       "drizzle-orm": "^0.38.4",

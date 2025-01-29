@@ -9,6 +9,7 @@
       "@openauthjs/openauth": "^0.3.6",
       "@project/api": "workspace:*",
       "@project/db": "workspace:*",
+      "@project/env": "workspace:*",
       "hono": "^4.6.19"
    },
    "devDependencies": {

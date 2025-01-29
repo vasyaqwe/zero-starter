@@ -8,4 +8,7 @@ export type ServerEnv = {
 
 export type ClientEnv = (typeof clientEnv)["production" | "development"]
 
-export type Env = ServerEnv & ClientEnv
+export type Env = {
+   client: ClientEnv
+   server: ServerEnv
+}

@@ -4,15 +4,17 @@ import { GithubProvider } from "@openauthjs/openauth/provider/github"
 import { CloudflareStorage } from "@openauthjs/openauth/storage/cloudflare"
 import { CodeUI } from "@openauthjs/openauth/ui/code"
 import { subjects } from "@project/api/auth/subjects"
-import { handleAuthError } from "@project/api/auth/utils"
 import { and, eq } from "@project/db"
-import { type Database, initDb } from "@project/db/client"
+import { type Database, db } from "@project/db/client"
 import { oauthAccount, user } from "@project/db/schema/user"
+import { clientEnv } from "@project/env/client"
+import type { ClientEnv } from "@project/env/types"
 import { Hono } from "hono"
 import { HTTPException } from "hono/http-exception"
 import { logger } from "hono/logger"
 
-type Bindings = {
+type AuthEnv = {
+   ENVIRONMENT: "production" | "development"
    GITHUB_CLIENT_ID: string
    GITHUB_CLIENT_SECRET: string
    DATABASE_URL: string
@@ -22,18 +24,26 @@ type Bindings = {
 const app = new Hono<{
    Variables: {
       db: Database
+      env: {
+         client: ClientEnv
+         server: AuthEnv
+      }
    }
-   Bindings: Bindings
+   Bindings: AuthEnv
 }>()
    .use(logger())
    .use(async (c, next) => {
-      c.set("db", initDb(c))
+      c.set("env", {
+         client: clientEnv[c.env.ENVIRONMENT],
+         server: c.env,
+      })
+      c.set("db", db(c))
       await next()
    })
    .all("*", async (c) =>
       issuer({
          storage: CloudflareStorage({
-            namespace: c.env.KV,
+            namespace: c.var.env.server.KV,
          }),
          providers: {
             code: CodeProvider(
@@ -44,8 +54,8 @@ const app = new Hono<{
                }),
             ),
             github: GithubProvider({
-               clientID: c.env.GITHUB_CLIENT_ID,
-               clientSecret: c.env.GITHUB_CLIENT_SECRET,
+               clientID: c.var.env.server.GITHUB_CLIENT_ID,
+               clientSecret: c.var.env.server.GITHUB_CLIENT_SECRET,
                scopes: ["user:email"],
             }),
          },
@@ -216,7 +226,17 @@ const app = new Hono<{
                   message: "Invalid provider",
                })
             } catch (error) {
-               return handleAuthError(error as Error, c)
+               const message =
+                  error instanceof Error ? error.message : "Auth error"
+               console.error(message)
+
+               const newRedirectUrl = new URL(
+                  `${c.var.env.client.WEB_DOMAIN}/login`,
+               )
+
+               newRedirectUrl.searchParams.append("error", "true")
+
+               return c.redirect(newRedirectUrl.toString())
             }
          },
       }).fetch(c.req.raw, c.env, c.executionCtx),

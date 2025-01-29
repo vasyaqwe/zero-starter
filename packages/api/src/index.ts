@@ -3,7 +3,7 @@ import { handleError } from "@project/api/error/utils"
 import { createRouter } from "@project/api/misc/utils"
 import { authRoute } from "@project/api/user/auth/route"
 import { userRoute } from "@project/api/user/route"
-import { initDb } from "@project/db/client"
+import { db } from "@project/db/client"
 import { clientEnv } from "@project/env/client"
 import { cors } from "hono/cors"
 import { csrf } from "hono/csrf"
@@ -13,13 +13,16 @@ const app = createRouter()
 
 app.use(logger())
    .use(async (c, next) => {
-      c.set("db", initDb(c))
-      c.set("env", clientEnv[c.env.ENVIRONMENT])
+      c.set("env", {
+         client: clientEnv[c.env.ENVIRONMENT],
+         server: c.env,
+      })
+      c.set("db", db(c))
       await next()
    })
    .use((c, next) => {
       const handler = cors({
-         origin: [c.var.env.WEB_DOMAIN, ...ALLOWED_ORIGINS],
+         origin: [c.var.env.client.WEB_DOMAIN, ...ALLOWED_ORIGINS],
          credentials: true,
          maxAge: 600,
       })
@@ -38,7 +41,7 @@ const base = createRouter()
 const auth = createRouter()
    .use((c, next) => {
       const handler = csrf({
-         origin: [c.var.env.WEB_DOMAIN, ...ALLOWED_ORIGINS],
+         origin: [c.var.env.client.WEB_DOMAIN, ...ALLOWED_ORIGINS],
       })
       return handler(c, next)
    })

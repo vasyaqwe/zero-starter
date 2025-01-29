@@ -12,5 +12,15 @@
          "binding": "KV",
          "id": "7491a3f0e3e94d48aaf96cd87197a94a"
       }
-   ]
+   ],
+   "vars": {
+      "ENVIRONMENT": "development"
+   },
+   "env": {
+      "production": {
+         "vars": {
+            "ENVIRONMENT": "production"
+         }
+      }
+   }
 }
