@@ -6,9 +6,9 @@ import postgres from "postgres"
 import * as schema from "./schema"
 
 export const db = (c: {
-   var: { env: { server: Pick<Env["server"], "DATABASE_URL"> } }
+   var: { env: Pick<Env, "DATABASE_URL"> }
 }) => {
-   const client = postgres(c.var.env.server.DATABASE_URL)
+   const client = postgres(c.var.env.DATABASE_URL)
 
    return drizzle(client, {
       schema,

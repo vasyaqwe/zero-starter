@@ -7,7 +7,7 @@ type Variables = {
    env: Env
 }
 
-type AuthVariables = { user: User }
+type AuthVariables = Variables & { user: User }
 
 export type HonoEnv = {
    Bindings: ServerEnv
@@ -16,5 +16,5 @@ export type HonoEnv = {
 
 export type AuthedHonoEnv = {
    Bindings: ServerEnv
-   Variables: Variables & AuthVariables
+   Variables: AuthVariables
 }

@@ -24,26 +24,20 @@ type AuthEnv = {
 const app = new Hono<{
    Variables: {
       db: Database
-      env: {
-         client: ClientEnv
-         server: AuthEnv
-      }
+      env: ClientEnv & AuthEnv
    }
    Bindings: AuthEnv
 }>()
    .use(logger())
    .use(async (c, next) => {
-      c.set("env", {
-         client: clientEnv[c.env.ENVIRONMENT],
-         server: c.env,
-      })
+      c.set("env", { ...c.env, ...clientEnv[c.env.ENVIRONMENT] })
       c.set("db", db(c))
       await next()
    })
    .all("*", async (c) =>
       issuer({
          storage: CloudflareStorage({
-            namespace: c.var.env.server.KV,
+            namespace: c.var.env.KV,
          }),
          providers: {
             code: CodeProvider(
@@ -54,8 +48,8 @@ const app = new Hono<{
                }),
             ),
             github: GithubProvider({
-               clientID: c.var.env.server.GITHUB_CLIENT_ID,
-               clientSecret: c.var.env.server.GITHUB_CLIENT_SECRET,
+               clientID: c.var.env.GITHUB_CLIENT_ID,
+               clientSecret: c.var.env.GITHUB_CLIENT_SECRET,
                scopes: ["user:email"],
             }),
          },
@@ -230,9 +224,7 @@ const app = new Hono<{
                   error instanceof Error ? error.message : "Auth error"
                console.error(message)
 
-               const newRedirectUrl = new URL(
-                  `${c.var.env.client.WEB_DOMAIN}/login`,
-               )
+               const newRedirectUrl = new URL(`${c.var.env.WEB_DOMAIN}/login`)
 
                newRedirectUrl.searchParams.append("error", "true")
 

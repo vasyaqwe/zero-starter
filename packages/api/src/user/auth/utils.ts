@@ -14,7 +14,7 @@ export const createJwt = async ({
    const jwt = await new SignJWT(jwtPayload)
       .setProtectedHeader({ alg: "HS256" })
       .setExpirationTime("30days")
-      .sign(new TextEncoder().encode(c.var.env.server.ZERO_AUTH_SECRET))
+      .sign(new TextEncoder().encode(c.var.env.ZERO_AUTH_SECRET))
 
    return jwt
 }
@@ -22,7 +22,7 @@ export const createJwt = async ({
 export const handleAuthError = (error: Error, c: Context<HonoEnv>) => {
    console.error(error.message)
 
-   const newRedirectUrl = new URL(`${c.var.env.client.WEB_DOMAIN}/login`)
+   const newRedirectUrl = new URL(`${c.var.env.WEB_DOMAIN}/login`)
 
    newRedirectUrl.searchParams.append("error", "true")
 
