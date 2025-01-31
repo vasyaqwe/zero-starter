@@ -4,6 +4,7 @@
       "paths": {
          "@project/api/*": ["./src/*"]
       },
+      "types": ["@cloudflare/workers-types", "node"],
       "tsBuildInfoFile": "node_modules/.cache/tsbuildinfo.json"
    },
    "include": ["src"]

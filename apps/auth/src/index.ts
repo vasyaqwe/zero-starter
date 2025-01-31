@@ -8,23 +8,15 @@ import { and, eq } from "@project/db"
 import { type Database, db } from "@project/db/client"
 import { oauthAccount, user } from "@project/db/schema/user"
 import { clientEnv } from "@project/env/client"
-import type { ClientEnv } from "@project/env/types"
+import type { AuthEnv, ClientEnv } from "@project/env/types"
 import { Hono } from "hono"
 import { HTTPException } from "hono/http-exception"
 import { logger } from "hono/logger"
 
-type AuthEnv = {
-   ENVIRONMENT: "production" | "development"
-   GITHUB_CLIENT_ID: string
-   GITHUB_CLIENT_SECRET: string
-   DATABASE_URL: string
-   KV: KVNamespace
-}
-
 const app = new Hono<{
    Variables: {
       db: Database
-      env: ClientEnv & AuthEnv
+      env: AuthEnv & ClientEnv
    }
    Bindings: AuthEnv
 }>()

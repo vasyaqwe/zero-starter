@@ -16,7 +16,7 @@ const createZero = ({
       auth,
       server: env.CACHE_DOMAIN,
       schema,
-      kvStore: import.meta.env.MODE === "development" ? "mem" : "idb",
+      kvStore: env.DEV ? "mem" : "idb",
    })
 
 export let zero = createZero()

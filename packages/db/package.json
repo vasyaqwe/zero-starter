@@ -34,15 +34,16 @@
       "studio": "pnpm drizzle-kit studio"
    },
    "dependencies": {
-      "@project/env": "workspace:*",
       "@neondatabase/serverless": "^0.10.4",
+      "@project/env": "workspace:*",
       "base-x": "^5.0.0",
       "drizzle-orm": "^0.38.4",
-      "drizzle-zod": "^0.5.1",
+      "drizzle-zod": "^0.7.0",
       "postgres": "^3.4.5",
-      "zod": "^3.23.8"
+      "zod": "^3.24.1"
    },
    "devDependencies": {
+      "@cloudflare/workers-types": "^4.20250124.3",
       "@project/tsconfig": "workspace:*",
       "@types/node": "^20.12.9",
       "drizzle-kit": "^0.30.1"

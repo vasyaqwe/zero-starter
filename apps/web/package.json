@@ -14,9 +14,9 @@
     "tauri": "tauri"
   },
   "dependencies": {
-    "@openauthjs/openauth": "^0.3.6",
     "@project/sync": "workspace:*",
     "@project/env": "workspace:*",
+    "@openauthjs/openauth": "^0.3.6",
     "@tanstack/react-router": "^1.95.1",
     "@tanstack/router-plugin": "^1.95.1",
     "@tanstack/zod-adapter": "^1.95.1",
@@ -44,6 +44,7 @@
     "@project/api": "workspace:*",
     "@project/tsconfig": "workspace:*",
     "@tauri-apps/cli": "^2.2.2",
+    "@cloudflare/workers-types": "^4.20250124.3",
     "@types/node": "^20.12.9",
     "@types/react": "^19.0.2",
     "@types/react-dom": "^19.0.2",

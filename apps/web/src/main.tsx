@@ -1,3 +1,4 @@
+import { env } from "@/env"
 // import "@project/ui/styles"
 import {
    ErrorComponent,
@@ -51,11 +52,11 @@ function CatchBoundary({ error }: ErrorComponentProps) {
 
    return (
       <div className="grid h-svh place-items-center text-center">
-         {import.meta.env.DEV && (
-            <div className="absolute top-0">
+         {env.DEV ? (
+            <div className="absolute top-20">
                <ErrorComponent error={error} />
             </div>
-         )}
+         ) : null}
 
          <div>
             <h1 className="mb-2 font-semibold text-xl">An error occurred</h1>

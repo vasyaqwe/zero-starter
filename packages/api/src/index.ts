@@ -10,8 +10,7 @@ import { csrf } from "hono/csrf"
 import { logger } from "hono/logger"
 
 const app = createRouter()
-
-app.use(logger())
+   .use(logger())
    .use(async (c, next) => {
       c.set("env", { ...c.env, ...clientEnv[c.env.ENVIRONMENT] })
       c.set("db", db(c))
