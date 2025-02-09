@@ -16,17 +16,15 @@ import * as React from "react"
 import ReactDOM from "react-dom/client"
 import { routeTree } from "./routeTree.gen"
 
-const createRouter = () => {
-   return createTanStackRouter({
-      routeTree,
-      context: {},
-      defaultPreload: "intent",
-      defaultPendingMs: 0,
-      defaultPendingMinMs: 0,
-      defaultNotFoundComponent: NotFound,
-      defaultErrorComponent: CatchBoundary,
-   })
-}
+const router = createTanStackRouter({
+   routeTree,
+   context: {},
+   defaultPreload: "intent",
+   defaultPendingMs: 0,
+   defaultPendingMinMs: 0,
+   defaultNotFoundComponent: NotFound,
+   defaultErrorComponent: CatchBoundary,
+})
 
 function NotFound() {
    return (
@@ -83,20 +81,24 @@ declare global {
 
 declare module "@tanstack/react-router" {
    interface Register {
-      router: ReturnType<typeof createRouter>
+      router: typeof router
    }
 }
 
 // biome-ignore lint/style/noNonNullAssertion: ...
-ReactDOM.createRoot(document.getElementById("app")!).render(
-   <React.StrictMode>
-      <ThemeProvider
-         defaultTheme="light"
-         attribute="class"
-         enableSystem
-         disableTransitionOnChange
-      >
-         <RouterProvider router={createRouter()} />
-      </ThemeProvider>
-   </React.StrictMode>,
-)
+const rootElement = document.getElementById("app")!
+if (!rootElement.innerHTML || rootElement.innerHTML.trim().length === 0) {
+   const root = ReactDOM.createRoot(rootElement)
+   root.render(
+      <React.StrictMode>
+         <ThemeProvider
+            defaultTheme="light"
+            attribute="class"
+            enableSystem
+            disableTransitionOnChange
+         >
+            <RouterProvider router={router} />
+         </ThemeProvider>
+      </React.StrictMode>,
+   )
+}
