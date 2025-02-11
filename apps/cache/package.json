@@ -1,8 +1,8 @@
 {
    "name": "@project/cache",
    "scripts": {
-      "dev:cache": "zero-cache-dev -p src/schema.ts",
-      "build:cache": "zero-build-schema -p src/schema.ts",
+      "dev": "zero-cache-dev -p src/schema.ts",
+      "build": "zero-build-schema -p src/schema.ts",
       "typecheck": "tsc --noEmit"
    },
    "exports": {
@@ -16,7 +16,6 @@
       "@project/sync": "workspace:*"
    },
    "devDependencies": {
-      "@project/tsconfig": "workspace:*",
-      "@types/node": "^20.12.9"
+      "@project/tsconfig": "workspace:*"
    }
 }

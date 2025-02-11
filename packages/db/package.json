@@ -28,13 +28,12 @@
       "build": "tsc",
       "clean": "rm -rf .turbo node_modules",
       "typecheck": "tsc --noEmit --emitDeclarationOnly false",
-      "drop": "pnpm drizzle-kit drop",
-      "generate": "pnpm drizzle-kit generate",
-      "migrate": "pnpm drizzle-kit migrate",
-      "studio": "pnpm drizzle-kit studio"
+      "drop": "bun --env-file ../../.env drizzle-kit drop",
+      "generate": "bun --env-file ../../.env drizzle-kit generate",
+      "migrate": "bun --env-file ../../.env drizzle-kit migrate",
+      "studio": "bun --env-file ../../.env drizzle-kit studio"
    },
    "dependencies": {
-      "@neondatabase/serverless": "^0.10.4",
       "@project/env": "workspace:*",
       "base-x": "^5.0.0",
       "drizzle-orm": "^0.38.4",
@@ -43,9 +42,7 @@
       "zod": "^3.24.1"
    },
    "devDependencies": {
-      "@cloudflare/workers-types": "^4.20250124.3",
       "@project/tsconfig": "workspace:*",
-      "@types/node": "^20.12.9",
       "drizzle-kit": "^0.30.1"
    }
 }

@@ -44,9 +44,6 @@ export const oauthAccountRelations = relations(oauthAccount, ({ one }) => ({
    }),
 }))
 
-export const userSelectSchema = createSelectSchema(user).omit({
-   createdAt: true,
-   updatedAt: true,
-})
+export const userSelectSchema = createSelectSchema(user)
 
 export type User = z.infer<typeof userSelectSchema>

@@ -60,9 +60,6 @@ const app = new Hono<{
                      columns: {
                         id: true,
                         email: true,
-                        name: true,
-                        partner: true,
-                        image: true,
                      },
                   })
 
@@ -73,9 +70,6 @@ const app = new Hono<{
                         .returning({
                            id: user.id,
                            email: user.email,
-                           name: user.name,
-                           partner: user.partner,
-                           image: user.image,
                         })
                      if (!createdUser)
                         throw new HTTPException(500, {
@@ -122,9 +116,6 @@ const app = new Hono<{
                               columns: {
                                  id: true,
                                  email: true,
-                                 name: true,
-                                 partner: true,
-                                 image: true,
                               },
                            },
                         },
@@ -187,9 +178,6 @@ const app = new Hono<{
                         .returning({
                            id: user.id,
                            email: user.email,
-                           name: user.name,
-                           partner: user.partner,
-                           image: user.image,
                         })
 
                      if (!newUser)

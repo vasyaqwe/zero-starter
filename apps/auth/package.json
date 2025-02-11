@@ -6,16 +6,11 @@
       "typecheck": "tsc --noEmit"
    },
    "dependencies": {
-      "@openauthjs/openauth": "^0.3.6",
       "@project/api": "workspace:*",
       "@project/db": "workspace:*",
-      "@project/env": "workspace:*",
-      "hono": "^4.6.19"
+      "@project/env": "workspace:*"
    },
    "devDependencies": {
-      "@project/tsconfig": "workspace:*",
-      "@cloudflare/workers-types": "^4.20250124.3",
-      "@types/node": "^20.12.9",
-      "wrangler": "^3.105.1"
+      "@project/tsconfig": "workspace:*"
    }
 }
