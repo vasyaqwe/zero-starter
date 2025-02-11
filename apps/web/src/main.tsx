@@ -28,15 +28,16 @@ const router = createTanStackRouter({
 
 function NotFound() {
    return (
-      <div className="grid h-svh flex-1 place-items-center text-center">
-         <div>
-            <h1 className="mb-2 font-semibold text-xl">Not found</h1>
-            <p className="mb-5 text-lg leading-snug opacity-70">
-               This page does not exist — <br /> it may have been moved or
-               deleted.
-            </p>
-            <Link to={"/"}>Back home</Link>
-         </div>
+      <div className="flex grow flex-col items-center justify-center pt-20 text-center md:pt-40">
+         <h1 className="mb-2 font-semibold text-xl">Not found</h1>
+         <p className="mb-5 text-lg leading-snug opacity-70">
+            This page does not exist — <br /> it may have been moved or deleted.
+         </p>
+         <Link
+            to={"/"}
+         >
+            Back home
+         </Link>
       </div>
    )
 }
@@ -49,28 +50,25 @@ function CatchBoundary({ error }: ErrorComponentProps) {
    })
 
    return (
-      <div className="grid h-svh place-items-center text-center">
+      <div className="flex grow flex-col items-center justify-center pt-20 text-center md:pt-40">
+         <h1 className="mb-2 font-semibold text-xl">An error occurred</h1>
+         <p className="mb-5 text-lg leading-snug opacity-70">
+            Please, try again.
+         </p>
+         <div className="flex items-center justify-center gap-2.5">
+            <button
+               onClick={() => {
+                  router.invalidate()
+               }}
+            >
+               Try Again
+            </button>
+         </div>
          {env.DEV ? (
-            <div className="absolute top-20">
+            <div className="mx-auto mt-12 w-fit">
                <ErrorComponent error={error} />
             </div>
          ) : null}
-
-         <div>
-            <h1 className="mb-2 font-semibold text-xl">An error occurred</h1>
-            <p className="mb-5 text-lg leading-snug opacity-70">
-               Please, try again.
-            </p>
-            <div className="flex items-center justify-center gap-2.5">
-               <button
-                  onClick={() => {
-                     router.invalidate()
-                  }}
-               >
-                  Try Again
-               </button>
-            </div>
-         </div>
       </div>
    )
 }

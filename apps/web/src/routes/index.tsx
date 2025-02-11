@@ -1,10 +1,9 @@
 import { hc } from "@/lib/hono"
-import { useZero } from "@/lib/zero"
+import { useQuery, useZero } from "@/lib/zero"
 import { contentReadyAtom } from "@/ui/store"
 import { auth } from "@/user/auth/client"
 import { useAuth } from "@/user/auth/hooks"
 import { escapeLike } from "@project/sync"
-import { useQuery } from "@project/sync/react"
 import { createFileRoute } from "@tanstack/react-router"
 import { useSetAtom } from "jotai"
 import { type MouseEvent, useRef, useState } from "react"
@@ -20,30 +19,36 @@ export const Route = createFileRoute("/")({
 function RouteComponent() {
    const z = useZero()
    const { user, logout } = useAuth()
-   const [users] = useQuery(z.query.user)
-   const [mediums] = useQuery(z.query.medium)
+   const [users] = useQuery((q) => q.user)
+   const [mediums] = useQuery((q) => q.medium)
 
    const [filterUser, setFilterUser] = useState<string>("")
    const [filterText, setFilterText] = useState<string>("")
 
    const setContentReady = useSetAtom(contentReadyAtom)
 
-   const [allMessages, allMessagesResult] = useQuery(z.query.message)
+   const [allMessages, allMessagesResult] = useQuery((q) => q.message)
    if (allMessages.length > 0 || allMessagesResult.type === "complete") {
       setContentReady(true)
    }
 
-   let filtered = z.query.message
-      .related("medium", (medium) => medium.one())
-      .related("sender", (sender) => sender.one())
-      .orderBy("timestamp", "desc")
+   const [filteredMessages] = useQuery((q) => {
+      let filtered = q.message
+         .related("medium", (medium) => medium.one())
+         .related("sender", (sender) => sender.one())
+         .orderBy("timestamp", "desc")
 
-   if (filterUser) filtered = filtered.where("senderId", filterUser)
+      if (filterUser) filtered = filtered.where("senderId", filterUser)
 
-   if (filterText)
-      filtered = filtered.where("body", "LIKE", `%${escapeLike(filterText)}%`)
+      if (filterText)
+         filtered = filtered.where(
+            "body",
+            "LIKE",
+            `%${escapeLike(filterText)}%`,
+         )
 
-   const [filteredMessages] = useQuery(filtered)
+      return filtered
+   })
 
    const hasFilters = filterUser || filterText
    const [action, setAction] = useState<"add" | "remove" | undefined>(undefined)

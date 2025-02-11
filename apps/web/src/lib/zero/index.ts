@@ -1,7 +1,10 @@
 import { env } from "@/env"
 import { useAuth } from "@/user/auth/hooks"
-import { Zero } from "@project/sync"
-import { useZero as useZeroBase } from "@project/sync/react"
+import { type Query, Zero } from "@project/sync"
+import {
+   useZero as useZeroBase,
+   useQuery as useZeroQuery,
+} from "@project/sync/react"
 import type { Schema } from "@project/sync/schema"
 import { schema } from "@project/sync/schema"
 import { createEmitter } from "@vxrn/emitter"
@@ -46,6 +49,18 @@ export function usePassJWTToZero() {
          userId: user.id,
       })
    }, [user])
+}
+
+export function useQuery<
+   TSchema extends Schema,
+   TTable extends keyof TSchema["tables"] & string,
+   TReturn,
+>(
+   createQuery: (z: Zero<TSchema>["query"]) => Query<TSchema, TTable, TReturn>,
+   enable?: boolean,
+) {
+   const z = useZeroBase<TSchema>()
+   return useZeroQuery<TSchema, TTable, TReturn>(createQuery(z.query), enable)
 }
 
 export const useZero = useZeroBase<Schema>
